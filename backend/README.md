@@ -5,15 +5,17 @@ run the project *npm run start*
 
 ## API Endpoints `http://localhost:8080` 
 
-| Method | URL | Params | Body | Response |
+| Method | URL | Params | Body | Response | token |
 |--------|-----|--------|------|----------|
-| **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | JSON object with currency data |
-| **POST** | /api/users/login/ | - |  {email, password} | JSON object with currency rates |
-| **POST** | /api/users/logout/ | - |  {email} | JSON object with main currency rates |
+| **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | {token} | no |
+| **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
+| **POST** | /api/users/logout/ | - |  {email} | - | yes |
+| **GET** | /api/users/data/ | - |  {token} | {user : {name, email, currency, referalCode, role}} | yes |
+| **PUT** | /api/users/data/ |  |  {token, name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
 |--------|-----|--------|------|----------|
-| **GET** | /api/currency | - | - | JSON object with currency data |
-| **GET** | /api/currency/rates | - | - | JSON object with currency rates |
-| **GET** | /api/currency/rates/main | - | - | JSON object with main currency rates |
+| **GET** | /api/currency | - | - | JSON object with currency data | no |
+| **GET** | /api/currency/rates | - | - | JSON object with currency rates | no |
+| **GET** | /api/currency/rates/main | - | - | JSON object with main currency rates | no |
 
 ### Examples:
 #### 1. Get Currency

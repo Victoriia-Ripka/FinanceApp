@@ -18,13 +18,19 @@ const userSchema = new Schema(
       required: [true, "Set password for user (examplepassword)"],
       minlength: 6,
     },
-    currency: {
-      type: String,
-      required: [true, "Set currency for account"],
-    },
     referalCode: {
       type: String,
       required: [false],
+      unique: true,
+    },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    currency: {
+      type: String,
+      required: [true, "Set currency for account"],
     },
     token: {
       type: String,
