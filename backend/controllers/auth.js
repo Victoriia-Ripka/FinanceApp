@@ -1,10 +1,8 @@
 import { nanoid } from "nanoid";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Jimp } from "jimp";
 import dotenv from "dotenv";
 import { User } from "../models/user.js";
-// import { ctrlWrapper, HttpError } from "../helpers";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 
