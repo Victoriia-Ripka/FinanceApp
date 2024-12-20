@@ -20,28 +20,39 @@ const register = async (req, res) => {
     res.status(409);
     throw HttpError(409, "Email in use");
   }
-    
-  // without referalCode
+
   const hashPassword = await bcrypt.hash(password, 10);
-  const referalCode = nanoid(6);
   const payload = {
     email
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "72h" });
 
-  const newUser = await User.create({
-    ...req.body,
-    id: nanoid(),
-    password: hashPassword,
-    referalCode,
-    role: "admin",
-    token
-  });
+  let newUser;
 
-  const newGroup = await Group.create({ adminId: newUser._id, referalCode });
-
-  await Balance.create({ groupId: newGroup._id, currency: newUser.currency, total: 0 });
-
+  if (req.body.referalCode) {
+    // CURRENCY the same as admin
+    newUser = await User.create({
+      ...req.body,
+      id: nanoid(),
+      password: hashPassword,
+      referalCode: req.body.referalCode,
+      role: "user",
+      token
+    });
+  } else { // without referalCode
+    const referalCode = nanoid(6);   
+    newUser = await User.create({
+      ...req.body,
+      id: nanoid(),
+      password: hashPassword,
+      referalCode,
+      role: "admin",
+      token
+    });
+    const newGroup = await Group.create({ adminId: newUser._id, referalCode });
+    await Balance.create({ groupId: newGroup._id, currency: newUser.currency, total: 0 });
+  }
+  
   res.status(201).json({
     token: newUser.token
   });

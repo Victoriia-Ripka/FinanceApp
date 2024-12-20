@@ -1,5 +1,5 @@
-при локальному запуску спочатку *npm i*
-run the project *npm run start*
+- при локальному запуску спочатку *npm i*
+- запустити проєкт *npm run start*
 
 
 
@@ -13,9 +13,12 @@ run the project *npm run start*
 | **GET** | /api/users/data/ | - |  {token} | {user : {name, email, currency, referalCode, role}} | yes |
 | **PUT** | /api/users/data/ |  |  {token, name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
 |--------|-----|--------|------|----------|------|
-| **GET** | /api/currency | - | - | JSON object with currency data | no |
-| **GET** | /api/currency/rates | - | - | JSON object with currency rates | no |
-| **GET** | /api/currency/rates/main | - | - | JSON object with main currency rates | no |
+| **GET** | /api/currency/ | - | - | JSON object with currency data | no |
+| **GET** | /api/currency/rates/ | - | - | JSON object with currency rates | no |
+| **GET** | /api/currency/rates/main/ | - | - | JSON object with main currency rates | no |
+|--------|-----|--------|------|----------|------|
+| **GET** | /api/group/users/ | - |  {token} | {referalCode, currency, users: [ {_id, name, email, role}]} | yes |
+| **DELETE** | /api/group/users/ | :userId |  {token} | - | yes |
 
 ### Examples:
 #### 1. Get Currency
