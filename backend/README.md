@@ -5,7 +5,7 @@
 
 ## API Endpoints `http://localhost:8080` 
 
-| Method | URL | Params | Body | Response | bearer token |
+| Method | URL | Query | Body | Response | bearer token |
 |--------|-----|--------|------|----------|--------------|
 | **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | {token} | no |
 | **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
@@ -23,8 +23,9 @@
 | **POST** | /api/finance/categories/ | - | {title} | {message} | yes |
 | **GET** | /api/finance/categories/all/ | - | {} | {categories: [{_id, title, balanceId}]} | yes |
 | **DELETE** | /api/finance/categories/ | id | - | - | yes |
-| **POST** | /api/finance/record/ | - | {} | {} | yes |
-| **DELETE** | /api/finance/record/ | - | {} | - | yes |
+| **POST** | /api/finance/record/ | - | {type, title, value, method, categoryId, reccurent, repeating*} | {message} | yes |
+| **GET** | /api/finance/categories/all/ | - | {} | {records: [{_... }]} | yes |
+| **DELETE** | /api/finance/record/ | - | id | - | yes |
 
 
 ### Examples:

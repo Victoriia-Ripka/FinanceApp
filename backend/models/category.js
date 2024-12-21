@@ -23,11 +23,10 @@ const newCategorySchema = Joi.object({
   title: Joi.string().required()
 });
 
-const schemas = {
+const categorySchemas = {
   newCategorySchema
 };
 
-
 const Category = model("category", categorySchema);
 
-export { Category, schemas };
+export { Category, categorySchemas };
