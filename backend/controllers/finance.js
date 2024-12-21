@@ -8,8 +8,6 @@ import { Record } from "../models/record.js";
 
 dotenv.config();
 
-// TODO: delete total in Balance
-
 const addCategory = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const balanceId = await getBalanceId(token);
@@ -24,10 +22,13 @@ const getCategories = async (req, res) => {
   res.status(200).json({ categories });
 }
 
-// TODO: delete category then all records moved into "other" category with same TYPE
 const deleteCategory = async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const balanceId = await getBalanceId(token);
+  const otherCategory = await Category.findOne({ title: "other", balanceId });
+  await Record.updateMany({ categoryId: req.query.id }, { categoryId: otherCategory.id });
   await Category.findByIdAndDelete({ _id: req.query.id });
-  res.status(204).json({ message: "Category deleted successfully" });
+  res.status(204).json({ message: "Category deleted successfully, records transfered to" });
 }
 
 const addRecord = async (req, res) => {
@@ -41,7 +42,7 @@ const addRecord = async (req, res) => {
 const getRecords = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const balanceId = await getBalanceId(token);
-  const records = await Record.find({ balanceId: balanceId._id });
+  const records = await Record.find({ balanceId: balanceId });
   res.status(200).json({ records });
 }
 

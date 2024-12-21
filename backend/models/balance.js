@@ -8,10 +8,6 @@ const balanceSchema = new Schema(
             ref: "Group",
             required: true,
         },
-        total: {
-            type: Number,
-            required: true,
-        },
         currency: {
             type: String,
             required: true,

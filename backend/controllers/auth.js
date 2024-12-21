@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
 import { Balance } from "../models/balance.js";
+import { Category } from "../models/category.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 
@@ -12,7 +13,6 @@ dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
-// TODO: create default category for income and expense records
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -37,7 +37,7 @@ const register = async (req, res) => {
       id: nanoid(),
       password: hashPassword,
       referalCode: req.body.referalCode,
-      currency: groupAdminUser.currency, // CURRENCY the same as admin
+      currency: groupAdminUser.currency,
       role: "user",
       token
     });
@@ -52,7 +52,8 @@ const register = async (req, res) => {
       token
     });
     const newGroup = await Group.create({ adminId: newUser._id, referalCode });
-    await Balance.create({ groupId: newGroup._id, currency: newUser.currency, total: 0 });
+    const balance = await Balance.create({ groupId: newGroup._id, currency: newUser.currency });
+    const defaultCategory = await Category.create({ title: 'other', balanceId: balance._id });
   }
 
   res.status(201).json({
