@@ -10,8 +10,8 @@
 | **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | {token} | no |
 | **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
 | **POST** | /api/users/logout/ | - |  {email} | - | yes |
-| **GET** | /api/users/data/ | - |  {token} | {user : {name, email, currency, referalCode, role}} | yes |
-| **PUT** | /api/users/data/ |  |  {token, name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
+| **GET** | /api/users/data/ | - |  - | {user : {name, email, currency, referalCode, role}} | yes |
+| **PUT** | /api/users/data/ |  |  {name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
 |--------|-----|-------|------|----------|------|
 | **GET** | /api/currency/ | - | - | JSON object with currency data | no |
 | **GET** | /api/currency/rates/ | - | - | JSON object with currency rates | no |
