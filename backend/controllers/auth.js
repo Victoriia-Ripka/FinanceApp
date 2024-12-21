@@ -10,8 +10,9 @@ import ctrlWrapper from "../helpers/CtrlWrapper.js";
 
 dotenv.config();
 
-const { SECRET_KEY, BASE_URL } = process.env;
+const { SECRET_KEY } = process.env;
 
+// TODO: create default category for income and expense records
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -41,7 +42,7 @@ const register = async (req, res) => {
       token
     });
   } else { // without referalCode
-    const referalCode = nanoid(6);   
+    const referalCode = nanoid(6);
     newUser = await User.create({
       ...req.body,
       id: nanoid(),
@@ -53,7 +54,7 @@ const register = async (req, res) => {
     const newGroup = await Group.create({ adminId: newUser._id, referalCode });
     await Balance.create({ groupId: newGroup._id, currency: newUser.currency, total: 0 });
   }
-  
+
   res.status(201).json({
     token: newUser.token
   });
@@ -84,9 +85,9 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { email } = req.body; 
+  const { email } = req.body;
   const user = await User.findOneAndUpdate({ email }, { token: "" });
-  if (!user) { 
+  if (!user) {
     HttpError(404)
   }
   res.status(204).end();
@@ -115,7 +116,7 @@ const updateUserData = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const user = await User.findOne({ token });
 
-  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true } );
+  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
 
   res.status(200).json({
     user: {
@@ -124,7 +125,8 @@ const updateUserData = async (req, res) => {
       currency: updatedUser.currency,
       role: updatedUser.role,
       referalCode: updatedUser.referalCode
-  } });
+    }
+  });
 };
 
 // TODO: passwordRecovery

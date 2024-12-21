@@ -23,12 +23,19 @@
 | **POST** | /api/finance/categories/ | - | {title} | {message} | yes |
 | **GET** | /api/finance/categories/all/ | - | - | {categories: [{_id, title, balanceId}]} | yes |
 | **DELETE** | /api/finance/categories/ | id | - | - | yes |
-| **POST** | /api/finance/record/ | - | {type, title, value, method, date, categoryId, reccurent, repeating*} | {message} | yes |
-| **GET** | /api/finance/categories/all/ | - | - | {records: [{_... }]} | yes |
-| **DELETE** | /api/finance/record/ | id | - | - | yes |
+
+| **POST** | /api/finance/records/ | - | {type, title, value, method, date, categoryId, reccurent, repeating*} | {message} | yes |
+| **GET** | /api/finance/records/all/ | - | - | {records: [ {id, balanceId, type, title, value, method, category, reccurent, repeating} ]} | yes |
+| **DELETE** | /api/finance/records/ | id | - | - | yes |
+
+| **GET** | /api/finance/balance/current/ | - | - | {currency, currentMonth, incomeTotal, expenseTotal, total} | yes |
+| **GET** | /api/finance/balance/current/categories/ | - | - | {currency, currentMonth, categories: [title, total, categoryId]} | yes |
+| **GET** | /api/finance/balance/current/category/ | categoryId | - | {category: {title, total, currency, records: [{_id, type, title, value, date}]}} | yes |
+
+##### TODO: add statistics endpoints.
 
 
-- req = "date": "12.12.2024" | res = "date": "2024-12-11T23:00:00.000Z"
+- req = "date": "12.12.2024" (MM.DD.YYYY) | res = "date": "2024-12-11T23:00:00.000Z" (YYYYDD-MMTHH:MM:SS.000Z)
 
 ### Examples:
 #### 1. Get Currency

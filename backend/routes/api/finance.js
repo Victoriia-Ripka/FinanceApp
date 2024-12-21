@@ -14,4 +14,8 @@ router.post("/records", validateBody(recordSchemas.newRecordSchema), actions.add
 router.get("/records/all", actions.getRecords, authenticate);
 router.delete("/records", actions.deleteCategory, authenticate);
 
+router.get("/balance/current", actions.getCurrentMonthBalance, authenticate);
+router.get("/balance/current/categories", actions.getCurrentMonthCategoriesBalance, authenticate);
+router.get("/balance/current/category", actions.getCategoryDetails, authenticate);
+
 export default router;

@@ -4,9 +4,9 @@ import { handleMongooseError } from "../helpers/index.js";
 const balanceSchema = new Schema(
     {
         groupId: {
-          type: Schema.Types.ObjectId, 
-          ref: "Group", 
-          required: true,
+            type: Schema.Types.ObjectId,
+            ref: "Group",
+            required: true,
         },
         total: {
             type: Number,

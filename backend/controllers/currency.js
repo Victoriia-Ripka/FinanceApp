@@ -9,14 +9,12 @@ const getCurrency = async (req, res) => {
 }
 
 const getMainCurrencyRates = async (req, res) => {
-  // const { baseCurrency } = req.body;
   const response = await fetch(`${EXCHANGE_RATE_URL}/latest?access_key=${EXCHANGE_RATE_API_KEY}&symbols=USD,EUR,UAH`);
   const data = await response.json(); 
   res.status(200).json(data);
 }
 
 const getCurrencyRates = async (req, res) => {
-  // const { baseCurrency } = req.body;
   const response = await fetch(`${EXCHANGE_RATE_URL}/latest?access_key=${EXCHANGE_RATE_API_KEY}`);
   const data = await response.json(); 
   res.status(200).json(data);
