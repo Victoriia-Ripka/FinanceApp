@@ -27,6 +27,11 @@ const deleteUserFromGroup = async (req, res) => {
       return;
     }
 
+    if (user.role === 'user') {
+      res.status(403).json({ message: "You can't delete a user from the group. You aren't an admin" });
+      return;
+    }
+
     const userToDelete = await User.findById(userId);
     if (userToDelete.role === 'admin') {
       res.status(400).json({ message: "Can't delete the admin of the group" });

@@ -18,6 +18,10 @@ const recordSchema = new Schema(
             type: String,
             required: [true, "Set title for record"],
         },
+        date: {
+          type: Date,
+          required: [true, "Set date for record"],
+        },
         value: {
             type: Number,
             required: [true, "Set value for record"],
@@ -56,6 +60,9 @@ const newRecordSchema = Joi.object({
   value: Joi.number().min(0).required().messages({
     "number.base": "Value must be a number",
     "number.min": "Value must be at least 0",
+  }),
+  date: Joi.date().required().messages({
+    "any.required": "Set date for record",
   }),
   method: Joi.string().valid("cash", "card").default("cash"),
   categoryId: Joi.string().hex().length(24).required(), 

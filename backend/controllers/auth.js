@@ -30,12 +30,13 @@ const register = async (req, res) => {
   let newUser;
 
   if (req.body.referalCode) {
-    // CURRENCY the same as admin
+    const groupAdminUser = await User.findOne({ referalCode: req.body.referalCode, role: "admin" });
     newUser = await User.create({
       ...req.body,
       id: nanoid(),
       password: hashPassword,
       referalCode: req.body.referalCode,
+      currency: groupAdminUser.currency, // CURRENCY the same as admin
       role: "user",
       token
     });

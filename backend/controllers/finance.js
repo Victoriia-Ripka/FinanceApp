@@ -1,12 +1,8 @@
-import { nanoid } from "nanoid";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
 import { Balance } from "../models/balance.js";
 import { Category } from "../models/category.js";
-import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { Record } from "../models/record.js";
 
@@ -34,7 +30,8 @@ const deleteCategory = async (req, res) => {
 const addRecord = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
   const balanceId = await getBalanceId(token);
-  await Record.create({...req.body, balanceId: balanceId._id  });
+  const editedDate = new Date(req.body.date);
+  await Record.create({...req.body, balanceId: balanceId._id, date: editedDate  });
   res.status(201).json({ message: "Record added successfully" });
 }
 
