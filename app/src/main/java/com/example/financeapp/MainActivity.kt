@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,10 +19,17 @@ import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainScreen
 import com.example.financeapp.ui.theme.FinanceAppTheme
 
+// test commit
+
 enum class Routes {
     REGISTRATION,
     AUTHORIZATION,
-    MAIN_PAGE
+    MAIN_PAGE,
+    ACCOUNT,
+    ADD_RECORD,
+    STATISTICS,
+    COURSE,
+    GROUP,
 }
 
 class MainActivity : ComponentActivity() {
