@@ -22,10 +22,10 @@
 |--------|-----|-------|------|----------|------|
 | **POST** | /api/finance/categories/ | - | {title} | {message} | yes |
 | **GET** | /api/finance/categories/all/ | - | - | {categories: [{_id, title, balanceId}]} | yes |
-| **DELETE** | /api/finance/categories/ | - | id | - | yes |
+| **DELETE** | /api/finance/categories/ | id | - | - | yes |
 | **POST** | /api/finance/record/ | - | {type, title, value, method, date, categoryId, reccurent, repeating*} | {message} | yes |
 | **GET** | /api/finance/categories/all/ | - | - | {records: [{_... }]} | yes |
-| **DELETE** | /api/finance/record/ | - | id | - | yes |
+| **DELETE** | /api/finance/record/ | id | - | - | yes |
 
 
 - req = "date": "12.12.2024" | res = "date": "2024-12-11T23:00:00.000Z"
