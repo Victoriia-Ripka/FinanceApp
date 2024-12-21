@@ -5,8 +5,8 @@
 
 ## API Endpoints `http://localhost:8080` 
 
-| Method | URL | Params | Body | Response | token |
-|--------|-----|--------|------|----------|------|
+| Method | URL | Params | Body | Response | bearer token |
+|--------|-----|--------|------|----------|--------------|
 | **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | {token} | no |
 | **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
 | **POST** | /api/users/logout/ | - |  {email} | - | yes |
@@ -17,8 +17,15 @@
 | **GET** | /api/currency/rates/ | - | - | JSON object with currency rates | no |
 | **GET** | /api/currency/rates/main/ | - | - | JSON object with main currency rates | no |
 |--------|-----|--------|------|----------|------|
-| **GET** | /api/group/users/ | - |  {token} | {referalCode, currency, users: [ {_id, name, email, role}]} | yes |
-| **DELETE** | /api/group/users/ | :userId |  {token} | - | yes |
+| **GET** | /api/group/users/ | - | - | {referalCode, currency, users: [ {_id, name, email, role}]} | yes |
+| **DELETE** | /api/group/users/ | userId | - | - | yes |
+|--------|-----|--------|------|----------|------|
+| **POST** | /api/finance/categories/ | - | {title} | {message} | yes |
+| **GET** | /api/finance/categories/all/ | - | {} | {categories: [{_id, title, balanceId}]} | yes |
+| **DELETE** | /api/finance/categories/ | id | - | - | yes |
+| **POST** | /api/finance/record/ | - | {} | {} | yes |
+| **DELETE** | /api/finance/record/ | - | {} | - | yes |
+
 
 ### Examples:
 #### 1. Get Currency

@@ -4,6 +4,7 @@ import cors from "cors";
 import authRouter from "./routes/api/auth.js";
 import currencyRoutes from "./routes/api/currency.js";
 import groupRoutes from "./routes/api/group.js";
+import financeRoutes from "./routes/api/finance.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.static("public"));
 app.use("/api/users", authRouter);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/group", groupRoutes);
+app.use("/api/finance", financeRoutes);
 
 app.use((_, res, __) => {
   res.status(404).json({
