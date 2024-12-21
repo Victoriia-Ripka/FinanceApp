@@ -23,11 +23,9 @@
 | **POST** | /api/finance/categories/ | - | {title} | {message} | yes |
 | **GET** | /api/finance/categories/all/ | - | - | {categories: [{_id, title, balanceId}]} | yes |
 | **DELETE** | /api/finance/categories/ | id | - | - | yes |
-
 | **POST** | /api/finance/records/ | - | {type, title, value, method, date, categoryId, reccurent, repeating*} | {message} | yes |
 | **GET** | /api/finance/records/all/ | - | - | {records: [ {id, balanceId, type, title, value, method, category, reccurent, repeating} ]} | yes |
 | **DELETE** | /api/finance/records/ | id | - | - | yes |
-
 | **GET** | /api/finance/balance/current/ | - | - | {currency, currentMonth, incomeTotal, expenseTotal, total} | yes |
 | **GET** | /api/finance/balance/current/categories/ | - | - | {currency, currentMonth, categories: [title, total, categoryId]} | yes |
 | **GET** | /api/finance/balance/current/category/ | categoryId | - | {category: {title, total, currency, records: [{_id, type, title, value, date}]}} | yes |
