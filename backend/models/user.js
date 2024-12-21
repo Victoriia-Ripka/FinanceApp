@@ -20,8 +20,7 @@ const userSchema = new Schema(
     },
     referalCode: {
       type: String,
-      required: [false],
-      unique: true,
+      required: [false]
     },
     role: {
       type: String,
