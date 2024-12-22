@@ -27,7 +27,7 @@ const deleteCategory = async (req, res) => {
   const otherCategory = await Category.findOne({ title: "other", balanceId });
   await Record.updateMany({ categoryId: req.query.id }, { categoryId: otherCategory.id });
   await Category.findByIdAndDelete({ _id: req.query.id });
-  res.status(204).json({ message: "Category deleted successfully, records transfered to" });
+  res.status(204).end();
 }
 
 const addRecord = async (req, res) => {
@@ -44,9 +44,9 @@ const getRecords = async (req, res) => {
 }
 
 const deleteRecord = async (req, res) => {
-  if(!req.query.id) throw new HttpError(400, "Missing required parameter: id");
+  if (!req.query.id) throw new HttpError(400, "Missing required parameter: id");
   await Record.findByIdAndDelete({ _id: req.query.id });
-  res.status(204).json({ message: "Record deleted successfully" });
+  res.status(204).end();
 }
 
 const getBalanceId = async (token) => {

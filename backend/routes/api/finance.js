@@ -12,7 +12,7 @@ router.delete("/categories", authenticate, actions.deleteCategory);
 
 router.post("/records", authenticate, validateBody(recordSchemas.newRecordSchema), actions.addRecord);
 router.get("/records/all", authenticate, actions.getRecords);
-router.delete("/records", authenticate, actions.deleteCategory);
+router.delete("/records", authenticate, actions.deleteRecord);
 
 router.get("/balance/current", authenticate, actions.getCurrentMonthBalance);
 router.get("/balance/current/categories", authenticate, actions.getCurrentMonthCategoriesBalance);
