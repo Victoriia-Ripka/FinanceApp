@@ -7,12 +7,10 @@ const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), actions.register);
 router.post("/login", validateBody(schemas.loginSchema), actions.login);
-router.post("/logout", actions.logout, authenticate); 
-router.get("/data", actions.getUserData, authenticate); 
-router.put("/data", actions.updateUserData, authenticate); 
+router.post("/logout", authenticate, actions.logout); 
+router.get("/data", authenticate, actions.getUserData); 
+router.put("/data", authenticate, actions.updateUserData); 
 // router.get("/current", authenticate, actions.current); 
 // router.post("/password_recovery", ctrl.passwordRecovery);
-
-// verify with token
 
 export default router;

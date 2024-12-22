@@ -5,12 +5,13 @@ import dotenv from "dotenv";
 import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
 import { Balance } from "../models/balance.js";
+import { Category } from "../models/category.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 
 dotenv.config();
 
-const { SECRET_KEY, BASE_URL } = process.env;
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -30,17 +31,18 @@ const register = async (req, res) => {
   let newUser;
 
   if (req.body.referalCode) {
-    // CURRENCY the same as admin
+    const groupAdminUser = await User.findOne({ referalCode: req.body.referalCode, role: "admin" });
     newUser = await User.create({
       ...req.body,
       id: nanoid(),
       password: hashPassword,
       referalCode: req.body.referalCode,
+      currency: groupAdminUser.currency,
       role: "user",
       token
     });
   } else { // without referalCode
-    const referalCode = nanoid(6);   
+    const referalCode = nanoid(6);
     newUser = await User.create({
       ...req.body,
       id: nanoid(),
@@ -50,9 +52,10 @@ const register = async (req, res) => {
       token
     });
     const newGroup = await Group.create({ adminId: newUser._id, referalCode });
-    await Balance.create({ groupId: newGroup._id, currency: newUser.currency, total: 0 });
+    const balance = await Balance.create({ groupId: newGroup._id, currency: newUser.currency });
+    const defaultCategory = await Category.create({ title: 'other', balanceId: balance._id });
   }
-  
+
   res.status(201).json({
     token: newUser.token
   });
@@ -83,17 +86,15 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { email } = req.body; 
-  const user = await User.findOneAndUpdate({ email }, { token: "" });
-  if (!user) { 
-    HttpError(404)
+  const user = await User.findOneAndUpdate({ token: req.user.token }, { token: "" }, { new: true });
+  if (!user) {
+    throw HttpError(404)
   }
-  res.status(204).end();
+  res.status(204).json({ message: "Logged out successfully" });
 };
 
 const getUserData = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const user = await User.findOne({ token });
+  const user = await User.findOne({ token: req.user.token });
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
@@ -111,10 +112,9 @@ const getUserData = async (req, res) => {
 };
 
 const updateUserData = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const user = await User.findOne({ token });
+  const user = await User.findOne({ token: req.user.token });
 
-  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true } );
+  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
 
   res.status(200).json({
     user: {
@@ -123,7 +123,8 @@ const updateUserData = async (req, res) => {
       currency: updatedUser.currency,
       role: updatedUser.role,
       referalCode: updatedUser.referalCode
-  } });
+    }
+  });
 };
 
 // TODO: passwordRecovery
