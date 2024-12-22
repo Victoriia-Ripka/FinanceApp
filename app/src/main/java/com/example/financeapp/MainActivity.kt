@@ -19,8 +19,6 @@ import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainScreen
 import com.example.financeapp.ui.theme.FinanceAppTheme
 
-// test commit
-
 enum class Routes {
     REGISTRATION,
     AUTHORIZATION,
