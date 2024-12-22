@@ -5,26 +5,25 @@ import { Balance } from "../models/balance.js";
 import { Category } from "../models/category.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { Record } from "../models/record.js";
+import HttpError from "../helpers/HttpError.js";
 
 dotenv.config();
 
 const addCategory = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  const balanceId = await getBalanceId(req.user.token);
   await Category.create({ title: req.body.title, balanceId: balanceId._id });
   res.status(201).json({ message: "Category added successfully" });
 }
 
 const getCategories = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  const balanceId = await getBalanceId(req.user.token);
   const categories = await Category.find({ balanceId: balanceId._id });
   res.status(200).json({ categories });
 }
 
 const deleteCategory = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  if(!req.query.id) throw new HttpError(400, "Missing required parameter: id");
+  const balanceId = await getBalanceId(req.user.token);
   const otherCategory = await Category.findOne({ title: "other", balanceId });
   await Record.updateMany({ categoryId: req.query.id }, { categoryId: otherCategory.id });
   await Category.findByIdAndDelete({ _id: req.query.id });
@@ -32,21 +31,20 @@ const deleteCategory = async (req, res) => {
 }
 
 const addRecord = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  const balanceId = await getBalanceId(req.user.token);
   const editedDate = new Date(req.body.date);
   await Record.create({ ...req.body, balanceId: balanceId._id, date: editedDate });
   res.status(201).json({ message: "Record added successfully" });
 }
 
 const getRecords = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  const balanceId = await getBalanceId(req.user.token);
   const records = await Record.find({ balanceId: balanceId });
   res.status(200).json({ records });
 }
 
 const deleteRecord = async (req, res) => {
+  if(!req.query.id) throw new HttpError(400, "Missing required parameter: id");
   await Record.findByIdAndDelete({ _id: req.query.id });
   res.status(204).json({ message: "Record deleted successfully" });
 }
@@ -59,8 +57,7 @@ const getBalanceId = async (token) => {
 }
 
 const getCurrentMonthBalance = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  const balanceId = await getBalanceId(req.user.token);
   const balance = await Balance.findById(balanceId).select("currency");
 
   const now = new Date();
@@ -114,8 +111,7 @@ const getCurrentMonthBalance = async (req, res) => {
 };
 
 const getCurrentMonthCategoriesBalance = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  const balanceId = await getBalanceId(req.user.token);
   const balance = await Balance.findById(balanceId).select("currency");
 
   const now = new Date();
@@ -151,8 +147,11 @@ const getCurrentMonthCategoriesBalance = async (req, res) => {
 
 const getCategoryDetails = async (req, res) => {
   const categoryId = req.query.categoryId;
-  const token = req.headers.authorization?.split(" ")[1];
-  const balanceId = await getBalanceId(token);
+  if (!categoryId) {
+    res.status(400).json({ message: "Category ID is required" });
+    return;
+  }
+  const balanceId = await getBalanceId(req.user.token);
   const balance = await Balance.findById(balanceId).select("currency");
 
   const now = new Date();

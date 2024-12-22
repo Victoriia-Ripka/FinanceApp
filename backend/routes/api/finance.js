@@ -6,16 +6,16 @@ import { recordSchemas } from "../../models/record.js";
 
 const router = express.Router();
 
-router.post("/categories", validateBody(categorySchemas.newCategorySchema), actions.addCategory, authenticate);
-router.get("/categories/all", actions.getCategories, authenticate);
-router.delete("/categories", actions.deleteCategory, authenticate);
+router.post("/categories", authenticate, validateBody(categorySchemas.newCategorySchema), actions.addCategory);
+router.get("/categories/all", authenticate, actions.getCategories);
+router.delete("/categories", authenticate, actions.deleteCategory);
 
-router.post("/records", validateBody(recordSchemas.newRecordSchema), actions.addRecord, authenticate);
-router.get("/records/all", actions.getRecords, authenticate);
-router.delete("/records", actions.deleteCategory, authenticate);
+router.post("/records", authenticate, validateBody(recordSchemas.newRecordSchema), actions.addRecord);
+router.get("/records/all", authenticate, actions.getRecords);
+router.delete("/records", authenticate, actions.deleteCategory);
 
-router.get("/balance/current", actions.getCurrentMonthBalance, authenticate);
-router.get("/balance/current/categories", actions.getCurrentMonthCategoriesBalance, authenticate);
-router.get("/balance/current/category", actions.getCategoryDetails, authenticate);
+router.get("/balance/current", authenticate, actions.getCurrentMonthBalance);
+router.get("/balance/current/categories", authenticate, actions.getCurrentMonthCategoriesBalance);
+router.get("/balance/current/category", authenticate, actions.getCategoryDetails);
 
 export default router;

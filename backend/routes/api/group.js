@@ -4,7 +4,7 @@ import { actions } from "../../controllers/group.js";
 
 const router = express.Router();
 
-router.get("/users", actions.getGroupUsers, authenticate);
-router.delete("/users", actions.deleteUserFromGroup, authenticate);
+router.get("/users", authenticate, actions.getGroupUsers);
+router.delete("/users", authenticate, actions.deleteUserFromGroup);
 
 export default router;

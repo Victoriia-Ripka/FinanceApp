@@ -6,8 +6,7 @@ import { nanoid } from "nanoid";
 dotenv.config();
 
 const getGroupUsers = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const user = await User.findOne({ token });
+  const user = await User.findOne({ token: req.user.token });
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
@@ -19,15 +18,14 @@ const getGroupUsers = async (req, res) => {
 
 const deleteUserFromGroup = async (req, res) => {
     const { userId } = req.query;
-    const token = req.headers.authorization?.split(" ")[1];
 
-    const user = await User.findOne({ token });
+    const user = await User.findOne({ token: req.user.token });
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
 
-    if (user.role === 'user') {
+  if (user.role === 'user') {
       res.status(403).json({ message: "You can't delete a user from the group. You aren't an admin" });
       return;
     }

@@ -86,17 +86,15 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOneAndUpdate({ email }, { token: "" });
+  const user = await User.findOneAndUpdate({ token: req.user.token }, { token: "" }, { new: true });
   if (!user) {
-    HttpError(404)
+    throw HttpError(404)
   }
-  res.status(204).end();
+  res.status(204).json({ message: "Logged out successfully" });
 };
 
 const getUserData = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const user = await User.findOne({ token });
+  const user = await User.findOne({ token: req.user.token });
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
@@ -114,8 +112,7 @@ const getUserData = async (req, res) => {
 };
 
 const updateUserData = async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const user = await User.findOne({ token });
+  const user = await User.findOne({ token: req.user.token });
 
   const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
 
