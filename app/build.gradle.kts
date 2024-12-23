@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.ui.text.google.fonts)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
