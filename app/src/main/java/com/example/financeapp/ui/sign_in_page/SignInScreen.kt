@@ -1,45 +1,89 @@
 package com.example.financeapp.ui.sign_in_page
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.models.requests.RegisterRequest
+import com.example.financeapp.models.responses.RegisterResponse
+import com.example.financeapp.services.RetrofitClient
+import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
-
-
-
+import java.net.SocketTimeoutException
 
 @Composable
 fun SignInScreen(
     register: () -> Unit,
-    logInScreen: () -> Unit
+    logInScreen: () -> Unit,
+    userViewModel: UserViewModel
 ) {
-
-    var Name by remember { mutableStateOf("") }
-    var Email by remember { mutableStateOf("") }
-    var Password by remember { mutableStateOf("") }
-//    var Currency by remember { mutableStateOf("") }
-    var ReferalCode by remember { mutableStateOf("") }
-
-    var Currency: List<String> = listOf("Euro", "USD")
+    val context = LocalContext.current
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var referalCode by remember { mutableStateOf("") }
+    var currency: List<String> = listOf("Euro", "USD", "UAH")
     var selectedIndexDrop by rememberSaveable { mutableStateOf(0) }
     val buttonModifier = Modifier.width(280.dp)
 
-    fun dothing() {
-        println("do thing")
+    fun showMessageToUser(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun registerUser() {
+        val apiService = RetrofitClient.apiService
+
+        val request = RegisterRequest(
+            name = name,
+            email = email,
+            password = password,
+            referalCode = if (referalCode.isEmpty()) null else referalCode,
+            currency = currency[selectedIndexDrop]
+        )
+
+        apiService.registerUser(request).enqueue(object : retrofit2.Callback<RegisterResponse> {
+            override fun onResponse(
+                call: retrofit2.Call<RegisterResponse>,
+                response: retrofit2.Response<RegisterResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val registerResponse = response.body()
+                    registerResponse?.token?.let {
+                        userViewModel.setToken(it)
+                        Log.d("debug", "Registration successful: $it")
+                        register()
+                    }
+                } else {
+                    Log.d("debug", "Registration failed: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<RegisterResponse>, t: Throwable) {
+                if (t is SocketTimeoutException) {
+                    Log.d("debug", "Timeout error: ${t.message}")
+                    showMessageToUser("The server might be sleeping. Please try again.")
+                } else {
+                    Log.d("debug", "Error: ${t.message}")
+                    showMessageToUser("An error occurred: ${t.message}")
+                }
+            }
+        })
     }
 
     Column(modifier = Modifier.padding(60.dp, 60.dp),
@@ -50,44 +94,44 @@ fun SignInScreen(
             modifier = Modifier.padding(0.dp, 40.dp)
         )
         TextField(
-            value = Name,
-            onValueChange = { Name = it },
+            value = name,
+            onValueChange = { name = it },
             label = { Text("Ім'я") },
             maxLines = 1,
         )
         TextField(
-            value = Email,
-            onValueChange = { Email = it },
+            value = email,
+            onValueChange = { email = it },
             label = { Text("Email") },
             maxLines = 1,
         )
         TextField(
-            value = Password,
-            onValueChange = { Password = it },
+            value = password,
+            onValueChange = { password = it },
             label = { Text("Password") },
             maxLines = 1,
         )
-        DropdownList(Currency, selectedIndexDrop, buttonModifier, onItemClick = {
+        DropdownList(currency, selectedIndexDrop, buttonModifier, onItemClick = {
             selectedIndexDrop = it
-            val choosed_currency = Currency[it]
+            val choosed_currency = currency[it]
         })
         TextField(
-            value = ReferalCode,
-            onValueChange = { ReferalCode = it },
+            value = referalCode,
+            onValueChange = { referalCode = it },
             label = { Text("Реферальний код") },
             maxLines = 1,
         )
-        Column(modifier = Modifier.padding(0.dp, 100.dp),
+        Column(modifier = Modifier.padding(0.dp, 100.dp).height(300.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally)
         {
             Button(
-                onClick = register
+                onClick = { registerUser() },
             ) {
                 Text("Зареєструватися")
             }
             Button(
-                onClick = logInScreen
+                onClick = logInScreen,
             ) {
                 Text("Є існуючий акаунт?")
             }
