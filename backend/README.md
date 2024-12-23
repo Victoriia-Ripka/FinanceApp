@@ -10,8 +10,10 @@
 | **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | {token} | no |
 | **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
 | **POST** | /api/users/logout/ | - |  - | {message} | yes |
+| **POST** | /api/users/password_recovery/ | - |  {name, email, currency} | {newPassword} | no |
 | **GET** | /api/users/data/ | - |  - | {user : {name, email, currency, referalCode, role}} | yes |
 | **PUT** | /api/users/data/ |  |  {name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
+| **DELETE** | /api/users/ | - |  - | - | yes |
 |--------|-----|-------|------|----------|------|
 | **GET** | /api/currency/ | - | - | JSON object with currency data | no |
 | **GET** | /api/currency/rates/ | - | - | JSON object with currency rates | no |
@@ -29,9 +31,9 @@
 | **GET** | /api/finance/balance/current/ | - | - | {currency, currentMonth, incomeTotal, expenseTotal, total} | yes |
 | **GET** | /api/finance/balance/current/categories/ | - | - | {currency, currentMonth, categories: [title, total, categoryId]} | yes |
 | **GET** | /api/finance/balance/current/category/ | categoryId | - | {category: {title, total, currency, records: [{_id, type, title, value, date}]}} | yes |
-
-##### TODO: add statistics endpoints.
-
+|--------|-----|-------|------|----------|------|
+| **GET** | /api/statistics/ | - |  - | {totalSpent, totalIncome, totalEarnings, totalSavings, totalExpenditure, totalCategories,} | yes |
+|--------|-----|-------|------|----------|------|
 
 - req = "date": "12.12.2024" (MM.DD.YYYY) | res = "date": "2024-12-11T23:00:00.000Z" (YYYYDD-MMTHH:MM:SS.000Z)
 

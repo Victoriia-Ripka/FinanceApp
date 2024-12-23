@@ -5,6 +5,7 @@ import authRouter from "./routes/api/auth.js";
 import currencyRoutes from "./routes/api/currency.js";
 import groupRoutes from "./routes/api/group.js";
 import financeRoutes from "./routes/api/finance.js";
+import statisticsRoutes from "./routes/api/statistics.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api/users", authRouter);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/group", groupRoutes);
 app.use("/api/finance", financeRoutes);
+app.use("/api/statistics", statisticsRoutes);
 
 app.use((_, res, __) => {
   res.status(404).json({
