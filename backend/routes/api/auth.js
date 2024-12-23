@@ -11,6 +11,7 @@ router.post("/logout", authenticate, actions.logout);
 router.get("/data", authenticate, actions.getUserData); 
 router.put("/data", authenticate, actions.updateUserData); 
 // router.get("/current", authenticate, actions.current); 
-// router.post("/password_recovery", ctrl.passwordRecovery);
+router.post("/password_recovery", actions.passwordRecovery);
+router.delete("/", authenticate , actions.deleteUser); 
 
 export default router;

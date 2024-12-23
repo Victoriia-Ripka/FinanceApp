@@ -85,6 +85,8 @@ const login = async (req, res) => {
   });
 };
 
+// TODO: current
+
 const logout = async (req, res) => {
   const user = await User.findOneAndUpdate({ token: req.user.token }, { token: "" }, { new: true });
   if (!user) {
@@ -92,6 +94,30 @@ const logout = async (req, res) => {
   }
   res.status(204).json({ message: "Logged out successfully" });
 };
+
+const passwordRecovery = async (req, res) => {
+  const { email, name, currency } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user || user.name!== name || user.currency!== currency) {
+    res.status(404).json({ message: "Data doesn't match" });
+    return;
+  }
+
+  const newPassword = nanoid(6);
+  await User.findByIdAndUpdate(user._id, { password: await bcrypt.hash(newPassword, 10) }, { new: true });
+
+  res.status(200).json({ message: "Password recovery email sent successfully", password: newPassword });
+};
+
+const deleteUser = async (req, res) => {
+  const user = await User.findOneAndDelete({ token: req.user.token });
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+  res.status(204).json({ message: "User deleted successfully" });
+}
 
 const getUserData = async (req, res) => {
   const user = await User.findOne({ token: req.user.token });
@@ -127,13 +153,12 @@ const updateUserData = async (req, res) => {
   });
 };
 
-// TODO: passwordRecovery
-// TODO: current
-
 export const actions = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getUserData: ctrlWrapper(getUserData),
-  updateUserData: ctrlWrapper(updateUserData)
+  updateUserData: ctrlWrapper(updateUserData),
+  deleteUser: ctrlWrapper(deleteUser),
+  passwordRecovery: ctrlWrapper(passwordRecovery),
 };
