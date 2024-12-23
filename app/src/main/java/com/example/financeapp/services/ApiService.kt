@@ -1,21 +1,20 @@
 package com.example.financeapp.services
 
+import com.example.financeapp.models.requests.LoginRequest
 import com.example.financeapp.models.requests.RegisterRequest
+import com.example.financeapp.models.responses.LoginResponse
 import com.example.financeapp.models.responses.RegisterResponse
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Body
-import retrofit2.http.PUT
-import retrofit2.http.Query
+import retrofit2.http.POST
 
 interface ApiService {
     @POST("users/register/")
     fun registerUser(@Body request: RegisterRequest): Call<RegisterResponse>
 
-//    @POST("users/login/")
-//    fun loginUser(@Body request: ExampleRequest): Call<ExampleResponse>
-//
+    @POST("users/login/")
+    fun loginUser(@Body request: LoginRequest): Call<LoginResponse>
+
 //    @POST("users/logout/")
 //    fun logoutUser(@Query("param") param: String): Call<ExampleResponse>
 //
