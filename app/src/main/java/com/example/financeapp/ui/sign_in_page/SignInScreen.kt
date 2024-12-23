@@ -1,5 +1,7 @@
 package com.example.financeapp.ui.sign_in_page
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -20,13 +22,26 @@ import com.example.financeapp.models.requests.RegisterRequest
 import com.example.financeapp.models.responses.RegisterResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.pr4_calc.ui.dropdown.DropdownList
+import java.net.SocketTimeoutException
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SignInScreen(
     register: () -> Unit,
     logInScreen: () -> Unit
 ) {
-
+    val context = LocalContext.current
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -34,6 +49,10 @@ fun SignInScreen(
     var currency: List<String> = listOf("Euro", "USD", "UAH")
     var selectedIndexDrop by rememberSaveable { mutableStateOf(0) }
     val buttonModifier = Modifier.width(280.dp)
+
+    fun showMessageToUser(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
 
     fun registerUser() {
         val apiService = RetrofitClient.apiService
@@ -53,14 +72,20 @@ fun SignInScreen(
             ) {
                 if (response.isSuccessful) {
                     val registerResponse = response.body()
-                    println("Registration successful: ${registerResponse?.token}")
+                    Log.d("debug", "Registration successful: ${registerResponse?.token}")
                 } else {
-                    println("Registration failed: ${response.errorBody()?.string()}")
+                    Log.d("debug", "Registration failed: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<RegisterResponse>, t: Throwable) {
-                println("Error: ${t.message}")
+                if (t is SocketTimeoutException) {
+                    Log.d("debug", "Timeout error: ${t.message}")
+                    showMessageToUser("The server might be sleeping. Please try again.")
+                } else {
+                    Log.d("debug", "Error: ${t.message}")
+                    showMessageToUser("An error occurred: ${t.message}")
+                }
             }
         })
     }
@@ -100,17 +125,33 @@ fun SignInScreen(
             label = { Text("Реферальний код") },
             maxLines = 1,
         )
-        Column(modifier = Modifier.padding(0.dp, 100.dp),
+        Column(modifier = Modifier.padding(0.dp, 100.dp).height(300.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally)
         {
             Button(
-                onClick = { registerUser() }
+                onClick = { registerUser() },
+//                modifier = Modifier
+//                    .width(250.dp)
+//                    .height(60.dp),
+//                shape = RoundedCornerShape(12.dp), // Rounded corners
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFF6200EE), // Background color
+//                    contentColor = Color.White
+//                )
             ) {
                 Text("Зареєструватися")
             }
             Button(
-                onClick = logInScreen
+                onClick = logInScreen,
+//                modifier = Modifier
+//                    .width(200.dp)
+//                    .height(50.dp),
+//                shape = RoundedCornerShape(12.dp), // Rounded corners
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFF6200EE), // Background color
+//                    contentColor = Color.White
+//                )
             ) {
                 Text("Є існуючий акаунт?")
             }
