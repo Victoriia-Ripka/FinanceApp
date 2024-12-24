@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.account_page.AccountContent
 import com.example.financeapp.ui.add_record_page.AddRecordContent
+import com.example.financeapp.ui.group_page.GroupContent
 import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainContent
 import com.example.financeapp.ui.sign_in_page.SignInScreen
@@ -20,11 +21,11 @@ import com.example.financeapp.ui.theme.FinanceAppTheme
 import com.example.financeapp.viewmodel.UserViewModel
 
 enum class Routes {
-    REGISTRATION, // check
-    AUTHORIZATION, // check
-    PASSWORD_RECOVERY, // I
+    REGISTRATION,
+    AUTHORIZATION,
+    PASSWORD_RECOVERY, // fix logic
     MAIN_PAGE,
-    ACCOUNT, // check
+    ACCOUNT,
     GROUP, // I
     ADD_RECORD,
     STATISTICS,
@@ -77,6 +78,10 @@ fun MainActivityContent() {
                         deleted = { navController.navigate(route = Routes.REGISTRATION.name )},
                         userViewModel = userViewModel
                     )
+                    Drawer(content, navController)
+                }
+                composable(route = Routes.GROUP.name) {
+                    val content = GroupContent(userViewModel = userViewModel)
                     Drawer(content, navController)
                 }
                 composable(route = Routes.ADD_RECORD.name) {

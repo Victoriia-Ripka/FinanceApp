@@ -6,6 +6,7 @@ import com.example.financeapp.models.requests.RegisterRequest
 import com.example.financeapp.models.requests.UpdateUserRequest
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse
 import com.example.financeapp.models.responses.CurrentBalanceResponse
+import com.example.financeapp.models.responses.GroupResponse
 import com.example.financeapp.models.responses.LoginResponse
 import com.example.financeapp.models.responses.PasswordRecoveryResponse
 import com.example.financeapp.models.responses.RegisterResponse
@@ -50,11 +51,11 @@ interface ApiService {
 //    @GET("currency/rates/main/")
 //    fun getMainCurrenciesRates(): Call<ExampleResponse>
 
-//    @GET("group/users/")
-//    fun getGroupUsers(): Call<ExampleResponse>
+    @GET("group/users/")
+    fun getGroupUsers(@Header("Authorization") token: String): Call<GroupResponse>
 
 //    @DELETE("group/users/")
-//    fun updateUserData(@Query("userId") userId: String ): Call<Void>
+//    fun updateUserData(@Header("Authorization") token: String, @Query("userId") userId: String ): Call<Void>
 
 //    POST	/api/finance/categories/
 
