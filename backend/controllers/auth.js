@@ -8,6 +8,7 @@ import { Balance } from "../models/balance.js";
 import { Category } from "../models/category.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
+import { getBalanceId } from "./finance.js";
 
 dotenv.config();
 
@@ -104,10 +105,16 @@ const passwordRecovery = async (req, res) => {
     return;
   }
 
-  const newPassword = nanoid(6);
-  await User.findByIdAndUpdate(user._id, { password: await bcrypt.hash(newPassword, 10) }, { new: true });
+  const payload = {
+    email
+  };
 
-  res.status(200).json({ message: "Password recovery email sent successfully", password: newPassword });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "72h" });
+
+  const newPassword = nanoid(6);
+  const updatedUSer = await User.findByIdAndUpdate(user._id, { password: await bcrypt.hash(newPassword, 10), token }, { new: true });
+
+  res.status(200).json({ token: updatedUSer.token });
 };
 
 const deleteUser = async (req, res) => {
@@ -141,6 +148,11 @@ const updateUserData = async (req, res) => {
   const user = await User.findOne({ token: req.user.token });
 
   const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
+
+  if (req.body.currency && req.body.currency !== user.currency) {
+    const balanceId = await getBalanceId(req.user.token);
+    await Balance.findByIdAndUpdate(balanceId, { currency: updatedUser.currency }, { new: true });
+  }
 
   res.status(200).json({
     user: {

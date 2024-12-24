@@ -10,7 +10,7 @@
 | **POST** | /api/users/register/ | - | {name, email, password, currency, referalCode*} | {token} | no |
 | **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
 | **POST** | /api/users/logout/ | - |  - | {message} | yes |
-| **POST** | /api/users/password_recovery/ | - |  {name, email, currency} | {newPassword} | no |
+| **POST** | /api/users/password_recovery/ | - |  {name, email, currency} | {token} | no |
 | **GET** | /api/users/data/ | - |  - | {user : {name, email, currency, referalCode, role}} | yes |
 | **PUT** | /api/users/data/ |  |  {name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
 | **DELETE** | /api/users/ | - |  - | - | yes |
