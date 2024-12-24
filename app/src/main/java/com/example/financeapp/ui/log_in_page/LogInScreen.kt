@@ -4,6 +4,7 @@ package com.example.financeapp.ui.log_in_page
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +22,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.LoginRequest
 import com.example.financeapp.models.responses.LoginResponse
 import com.example.financeapp.services.RetrofitClient
+import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
 import java.net.SocketTimeoutException
@@ -93,7 +98,7 @@ fun LogInScreen(
             modifier = Modifier.padding(0.dp, 40.dp)
         )
         email = CustomTextField("Email", Modifier)
-        password = CustomTextField("Password", Modifier)
+        password = CustomPasswordInput("Password", Modifier)
         Column(modifier = Modifier.padding(0.dp, 100.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally)
@@ -108,7 +113,7 @@ fun LogInScreen(
                     loginUser()
                 }
             ) {
-                Text("Увійти".uppercase())
+                Text(text = "Увійти".uppercase())
             }
             TextButton(
                 modifier = Modifier

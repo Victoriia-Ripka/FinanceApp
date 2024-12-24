@@ -37,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.unit.sp
+import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 
 
@@ -110,7 +111,7 @@ fun SignInScreen(
         )
         name = CustomTextField("Ім'я", Modifier)
         email = CustomTextField("Email", Modifier)
-        password = CustomTextField("Password", Modifier)
+        password = CustomPasswordInput("Password", Modifier)
         DropdownList(currency, selectedIndexDrop, buttonModifier, onItemClick = {
             selectedIndexDrop = it
             val choosed_currency = currency[it]
