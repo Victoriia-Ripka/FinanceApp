@@ -46,7 +46,9 @@ import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun AccountContent(
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    logout: () -> Unit,
+    deleted: () -> Unit
 ): @Composable () -> Unit {
 
     val infoRowModifier = Modifier
@@ -145,6 +147,7 @@ fun AccountContent(
                         if (response.isSuccessful) {
                             userViewModel.setToken(" ")
                             showMessageToUser("User logouted successfully!")
+                            logout()
                         } else {
                             showMessageToUser("Error: ${response.message()}")
                         }
@@ -166,6 +169,7 @@ fun AccountContent(
                         if (response.isSuccessful) {
                             userViewModel.setToken(" ")
                             showMessageToUser("Account deleted successfully!")
+                            deleted()
                         } else {
                             showMessageToUser("Error: ${response.message()}")
                         }

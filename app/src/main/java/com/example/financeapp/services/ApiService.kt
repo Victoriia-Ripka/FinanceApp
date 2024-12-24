@@ -1,11 +1,13 @@
 package com.example.financeapp.services
 
 import com.example.financeapp.models.requests.LoginRequest
+import com.example.financeapp.models.requests.PasswordRecoveryRequest
 import com.example.financeapp.models.requests.RegisterRequest
 import com.example.financeapp.models.requests.UpdateUserRequest
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse
 import com.example.financeapp.models.responses.CurrentBalanceResponse
 import com.example.financeapp.models.responses.LoginResponse
+import com.example.financeapp.models.responses.PasswordRecoveryResponse
 import com.example.financeapp.models.responses.RegisterResponse
 import com.example.financeapp.models.responses.UserDataResponse
 import retrofit2.Call
@@ -27,8 +29,8 @@ interface ApiService {
     @POST("users/logout/")
     fun logoutUser(@Header("Authorization") token: String): Call<Void>
 
-//    @POST("users/password_recovery/")
-//    fun recoverPassword(@Body request: ExampleRequest): Call<ExampleResponse>
+    @POST("users/password_recovery/")
+    fun recoverPassword(@Body request: PasswordRecoveryRequest): Call<PasswordRecoveryResponse>
 
     @DELETE("users/")
     fun deleteAccount(@Header("Authorization") token: String): Call<Void>

@@ -83,11 +83,14 @@ import androidx.compose.ui.unit.dp
 import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.theme.CustomChipSelector
 import com.example.financeapp.ui.theme.CustomTextField
+import com.example.financeapp.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
-fun AddRecordContent(): @Composable () -> Unit {
+fun AddRecordContent(
+    userViewModel: UserViewModel
+): @Composable () -> Unit {
 
     val activeTextColor = Color(0xFFFFFFFF)
     val inactiveTextColor = Color(0xFF222831)

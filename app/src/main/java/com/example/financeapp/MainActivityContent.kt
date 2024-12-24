@@ -11,24 +11,24 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.account_page.AccountContent
-import com.example.financeapp.ui.account_page.AccountScreen
 import com.example.financeapp.ui.add_record_page.AddRecordContent
 import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainContent
-import com.example.financeapp.ui.main_page.MainScreen
 import com.example.financeapp.ui.sign_in_page.SignInScreen
+import com.example.financeapp.ui.password_recovery_page.PasswordRecoveryScreen
 import com.example.financeapp.ui.theme.FinanceAppTheme
 import com.example.financeapp.viewmodel.UserViewModel
 
 enum class Routes {
-    REGISTRATION,
-    AUTHORIZATION,
+    REGISTRATION, // check
+    AUTHORIZATION, // check
+    PASSWORD_RECOVERY, // I
     MAIN_PAGE,
-    ACCOUNT,
+    ACCOUNT, // check
+    GROUP, // I
     ADD_RECORD,
     STATISTICS,
     COURSE,
-    GROUP,
 }
 
 @Composable
@@ -55,6 +55,15 @@ fun MainActivityContent() {
                     LogInScreen(
                         authorizate = { navController.navigate(route = Routes.MAIN_PAGE.name )},
                         signInScreen = { navController.navigate(route = Routes.REGISTRATION.name )},
+                        passwordRecoveryScreen = { navController.navigate(route = Routes.PASSWORD_RECOVERY.name )},
+                        userViewModel = userViewModel
+                    )
+                }
+                composable(route = Routes.PASSWORD_RECOVERY.name) {
+                    PasswordRecoveryScreen(
+                        redirect = { navController.navigate(route = Routes.MAIN_PAGE.name )},
+                        logInScreen = { navController.navigate(route = Routes.AUTHORIZATION.name) },
+                        signInScreen = { navController.navigate(route = Routes.REGISTRATION.name )},
                         userViewModel = userViewModel
                     )
                 }
@@ -63,15 +72,15 @@ fun MainActivityContent() {
                     Drawer(content, navController)
                 }
                 composable(route = Routes.ACCOUNT.name) {
-//                    AccountScreen(
-//                        logout = { navController.navigate(route = Routes.REGISTRATION.name )},
-//                        userViewModel = userViewModel
-//                    )
-                    val content = AccountContent(userViewModel = userViewModel)
+                    val content = AccountContent(
+                        logout = { navController.navigate(route = Routes.AUTHORIZATION.name )},
+                        deleted = { navController.navigate(route = Routes.REGISTRATION.name )},
+                        userViewModel = userViewModel
+                    )
                     Drawer(content, navController)
                 }
                 composable(route = Routes.ADD_RECORD.name) {
-                    val content = AddRecordContent()
+                    val content = AddRecordContent(userViewModel = userViewModel)
                     Drawer(content, navController)
                 }
             }

@@ -1,7 +1,6 @@
 package com.example.financeapp.ui.account_page
 
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,35 +16,13 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.financeapp.viewmodel.UserViewModel
 
 
 @Composable
-fun AccountScreen(
-//    logout: () -> Unit,
-//    userViewModel: UserViewModel
-) {
-
-//    val context = LocalContext.current
-//    var email by remember { mutableStateOf("") }
-//    var password by remember { mutableStateOf("") }
-//
-//    fun showMessageToUser(message: String) {
-//        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-//    }
-//
-//    fun logout() {
-//
-//    }
-
+fun AccountScreen() {
     val content = @Composable{
         Box() {
             Column(
@@ -76,7 +53,5 @@ fun AccountScreen(
             )
         }
     }
-
-//    Drawer(content)
 
 }
