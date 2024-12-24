@@ -49,7 +49,7 @@ const deleteRecord = async (req, res) => {
   res.status(204).end();
 }
 
-const getBalanceId = async (token) => {
+export const getBalanceId = async (token) => {
   const userCode = await User.findOne({ token }).select({ referalCode: 1 });
   const groupId = await Group.findOne({ referalCode: userCode.referalCode }).select({ _id: 1 });
   const balanceId = await Balance.findOne({ groupId: groupId._id }).select({ _id: 1 });
