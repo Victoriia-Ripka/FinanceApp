@@ -1,13 +1,18 @@
 package com.example.financeapp.ui.log_in_page
 
+
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,22 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.LoginRequest
 import com.example.financeapp.models.responses.LoginResponse
 import com.example.financeapp.services.RetrofitClient
+import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
 import java.net.SocketTimeoutException
-
-
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.CustomTextField
 
 
 @Composable
@@ -109,7 +105,6 @@ fun LogInScreen(
                 border = ButtonDefaults.outlinedButtonBorder(false),
                 onClick = { 
                     loginUser()
-                    authorizate()
                 }
             ) {
                 Text("Увійти")

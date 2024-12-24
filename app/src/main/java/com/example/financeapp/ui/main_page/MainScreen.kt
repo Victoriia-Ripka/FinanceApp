@@ -201,10 +201,10 @@ fun MainScreen(
                     }
                     Row() {
                         Text(
-                            text= "Дохід"
+                            text= "Витрати"
                         )
                         Text(
-                            text= "+ ${currentBalance.expenseTotal} ₴"
+                            text= "- ${currentBalance.expenseTotal} ₴"
                         )
                     }
                     Row() {
