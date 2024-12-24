@@ -144,7 +144,7 @@ fun MainContent(
                 {
                     Text(
                         text = "Баланс",
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontSize = 30.sp,
                         modifier = Modifier.padding(0.dp, 20.dp)
                     )
@@ -184,10 +184,10 @@ fun MainContent(
                             Row(modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween) {
                                 Text(
-                                    text= "Дохід"
+                                    text= "Витрати"
                                 )
                                 Text(
-                                    text= "+ ${currentBalance.expenseTotal} ₴"
+                                    text= "- ${currentBalance.expenseTotal} ₴"
                                 )
                             }
                             Row(modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth(),

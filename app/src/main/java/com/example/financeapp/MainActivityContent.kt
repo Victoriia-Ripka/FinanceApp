@@ -13,6 +13,8 @@ import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.account_page.AccountContent
 import com.example.financeapp.ui.account_page.AccountScreen
 import com.example.financeapp.ui.add_record_page.AddRecordContent
+import com.example.financeapp.ui.course_page.CourseInfoContent
+import com.example.financeapp.ui.group_page.GroupContent
 import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainContent
 import com.example.financeapp.ui.main_page.MainScreen
@@ -67,11 +69,30 @@ fun MainActivityContent() {
 //                        logout = { navController.navigate(route = Routes.REGISTRATION.name )},
 //                        userViewModel = userViewModel
 //                    )
-                    val content = AccountContent(userViewModel = userViewModel)
+                    val content = AccountContent(
+                        logout = { navController.navigate(route = Routes.AUTHORIZATION.name )},
+                        deleted = { navController.navigate(route = Routes.REGISTRATION.name )},
+                        userViewModel = userViewModel
+                    )
                     Drawer(content, navController)
                 }
                 composable(route = Routes.ADD_RECORD.name) {
-                    val content = AddRecordContent()
+                    val content = AddRecordContent(
+                        userViewModel = userViewModel,
+                        mainPage = { navController.navigate(route = Routes.MAIN_PAGE.name )}
+                    )
+                    Drawer(content, navController)
+                }
+                composable(route = Routes.COURSE.name) {
+                    val content = CourseInfoContent(
+                        userViewModel = userViewModel
+                    )
+                    Drawer(content, navController)
+                }
+                composable(route = Routes.GROUP.name) {
+                    val content = GroupContent(
+                        userViewModel = userViewModel
+                    )
                     Drawer(content, navController)
                 }
             }

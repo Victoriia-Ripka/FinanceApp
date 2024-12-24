@@ -35,7 +35,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.unit.sp
+import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 
 
@@ -103,13 +105,13 @@ fun SignInScreen(
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "FINANCE",
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 30.sp,
             modifier = Modifier.padding(0.dp, 40.dp)
         )
         name = CustomTextField("Ім'я", Modifier)
         email = CustomTextField("Email", Modifier)
-        password = CustomTextField("Password", Modifier)
+        password = CustomPasswordInput("Password", Modifier)
         DropdownList(currency, selectedIndexDrop, buttonModifier, onItemClick = {
             selectedIndexDrop = it
             val choosed_currency = currency[it]
@@ -129,15 +131,13 @@ fun SignInScreen(
                 },
                 border = ButtonDefaults.outlinedButtonBorder(false)
             ) {
-                Text("Зареєструватися")
+                Text("Зареєструватися".uppercase())
             }
-            OutlinedButton(
+            TextButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
+                    .padding(bottom = 10.dp),
                 onClick = logInScreen,
-                border = ButtonDefaults.outlinedButtonBorder(false)
             ) {
                 Text("Є існуючий акаунт?")
             }

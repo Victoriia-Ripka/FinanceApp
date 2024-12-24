@@ -46,18 +46,25 @@ import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun AccountContent(
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    logout: () -> Unit,
+    deleted: () -> Unit
 ): @Composable () -> Unit {
 
     val infoRowModifier = Modifier
         .fillMaxWidth()
         .height(40.dp)
 
+
+
     val content = @Composable{
         Box() {
             val context = LocalContext.current
             val token by userViewModel.token.observeAsState()
             val apiService = RetrofitClient.apiService
+
+            val contentColor = MaterialTheme.colorScheme.onSecondary
+            val contentColorConst = MaterialTheme.colorScheme.primary
 
             val user = remember {
                 mutableStateOf(
@@ -145,6 +152,7 @@ fun AccountContent(
                         if (response.isSuccessful) {
                             userViewModel.setToken(" ")
                             showMessageToUser("User logouted successfully!")
+                            logout()
                         } else {
                             showMessageToUser("Error: ${response.message()}")
                         }
@@ -166,6 +174,7 @@ fun AccountContent(
                         if (response.isSuccessful) {
                             userViewModel.setToken(" ")
                             showMessageToUser("Account deleted successfully!")
+                            deleted()
                         } else {
                             showMessageToUser("Error: ${response.message()}")
                         }
@@ -215,7 +224,8 @@ fun AccountContent(
                         fontSize = 32.sp,
                         modifier = Modifier
                             .padding(0.dp, 20.dp)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        color = contentColor
                     )
                     Column {
                         Row(
@@ -223,14 +233,17 @@ fun AccountContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = "Ім'я")
+                            Text(text = "Ім'я", color = contentColorConst)
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text(text = user.value.user.name)
+                                Text(text = user.value.user.name, color = contentColor)
                                 IconButton(onClick = { editName("new name") }) {
-                                    Icon(Icons.Filled.Edit, "Edit name")
+                                    Icon(
+                                        Icons.Filled.Edit,
+                                        "Edit name",
+                                        tint = contentColor)
                                 }
                             }
                         }
@@ -241,8 +254,8 @@ fun AccountContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = "Пошта")
-                            Text(text = user.value.user.email)
+                            Text(text = "Пошта", color = contentColorConst)
+                            Text(text = user.value.user.email, color = contentColor)
                         }
                         HorizontalDivider(color = Color(0xFF222831))
 
@@ -251,15 +264,18 @@ fun AccountContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = "Основна валюта")
+                            Text(text = "Основна валюта", color = contentColorConst)
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text(text = user.value.user.currency)
+                                Text(text = user.value.user.currency, color = contentColor)
                                 if(user.value.user.role == "admin") {
                                     IconButton(onClick = { editCurrency("UAH") }) {
-                                        Icon(Icons.Filled.Edit, "Edit currency")
+                                        Icon(
+                                            Icons.Filled.Edit,
+                                            "Edit currency",
+                                            tint = contentColor)
                                     }
                                 }
                             }
@@ -271,8 +287,8 @@ fun AccountContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = "Реферальний код")
-                            Text(text = user.value.user.referalCode)
+                            Text(text = "Реферальний код", color = contentColorConst)
+                            Text(text = user.value.user.referalCode, color = contentColor)
                         }
                         HorizontalDivider(color = Color(0xFF222831))
 
@@ -281,15 +297,15 @@ fun AccountContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = "Роль у групі")
-                            Text(text = user.value.user.role)
+                            Text(text = "Роль у групі", color = contentColorConst)
+                            Text(text = user.value.user.role, color = contentColor)
                         }
                         HorizontalDivider(color = Color(0xFF222831))
                     }
 
                     OutlinedButton(
                         modifier = Modifier
-                            .absoluteOffset(y = 390.dp)
+                            .absoluteOffset(y = 340.dp)
                             .fillMaxWidth()
                             .border(
                                 2.dp,
@@ -299,12 +315,12 @@ fun AccountContent(
                         onClick = { logOut() },
                         border = ButtonDefaults.outlinedButtonBorder(false)
                     ) {
-                        Text(text = "Вийти з облікового запису")
+                        Text(text = "Вийти з облікового запису".uppercase())
                     }
 
                     OutlinedButton(
                         modifier = Modifier
-                            .absoluteOffset(y = 390.dp)
+                            .absoluteOffset(y = 350.dp)
                             .fillMaxWidth()
                             .border(
                                 2.dp,
@@ -314,7 +330,7 @@ fun AccountContent(
                         onClick = { delete() },
                         border = ButtonDefaults.outlinedButtonBorder(false)
                     ) {
-                        Text(text = "Видалити акаунт")
+                        Text(text = "Видалити акаунт".uppercase())
                     }
                 }
             }

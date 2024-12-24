@@ -74,7 +74,9 @@ fun Drawer(
     val items = listOf(
         MenuRoutes(name = "Акаунт", route = { navController.navigate(route = Routes.ACCOUNT.name) }),
         MenuRoutes(name = "Баланс", route = { navController.navigate(route = Routes.MAIN_PAGE.name) }),
-        MenuRoutes(name = "Додати запис", route = { navController.navigate(route = Routes.ADD_RECORD.name) }))
+        MenuRoutes(name = "Додати запис", route = { navController.navigate(route = Routes.ADD_RECORD.name) }),
+        MenuRoutes(name = "Курси валют", route = { navController.navigate(route = Routes.COURSE.name) }),
+        MenuRoutes(name = "Група", route = { navController.navigate(route = Routes.GROUP.name) }),)
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val selectedItem = remember { mutableStateOf(items[1]) }
@@ -85,7 +87,10 @@ fun Drawer(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet (
+                drawerContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                drawerContentColor = MaterialTheme.colorScheme.onSecondary,
+            ) {
                 IconButton(
                     onClick = { scope.launch {
                         drawerState.close()
@@ -93,14 +98,26 @@ fun Drawer(
                 {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "Menu Button"
+                        contentDescription = "Menu Button",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
-                Text("Username", modifier = Modifier.padding(16.dp))
-                HorizontalDivider()
+                Text(
+                    text = "Username",
+                    modifier = Modifier.padding(16.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+                HorizontalDivider(
+                    thickness = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
                 items.forEach { item ->
                     NavigationDrawerItem(
-                        label = { Text(text = item.name) },
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        label = { Text(
+                            text = item.name,
+                            color = MaterialTheme.colorScheme.onSecondary
+                        ) },
                         selected = selectedItem.value == item,
                         onClick = {
                             scope.launch {
@@ -109,6 +126,10 @@ fun Drawer(
                                 item.route()
                             }
                         }
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
                 // ...other drawer items
