@@ -13,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,7 +88,7 @@ fun LogInScreen(
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "FINANCE",
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 30.sp,
             modifier = Modifier.padding(0.dp, 40.dp)
         )
@@ -107,14 +108,12 @@ fun LogInScreen(
                     loginUser()
                 }
             ) {
-                Text("Увійти")
+                Text("Увійти".uppercase())
             }
-            OutlinedButton(
+            TextButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
-                border = ButtonDefaults.outlinedButtonBorder(false),
+                    .padding(bottom = 10.dp),
                 onClick = signInScreen
             ) {
                 Text("Немає існуючого акаунту?")

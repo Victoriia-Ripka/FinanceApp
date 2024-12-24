@@ -67,11 +67,18 @@ fun MainActivityContent() {
 //                        logout = { navController.navigate(route = Routes.REGISTRATION.name )},
 //                        userViewModel = userViewModel
 //                    )
-                    val content = AccountContent(userViewModel = userViewModel)
+                    val content = AccountContent(
+                        logout = { navController.navigate(route = Routes.AUTHORIZATION.name )},
+                        deleted = { navController.navigate(route = Routes.REGISTRATION.name )},
+                        userViewModel = userViewModel
+                    )
                     Drawer(content, navController)
                 }
                 composable(route = Routes.ADD_RECORD.name) {
-                    val content = AddRecordContent()
+                    val content = AddRecordContent(
+                        userViewModel = userViewModel,
+                        mainPage = { navController.navigate(route = Routes.MAIN_PAGE.name )}
+                    )
                     Drawer(content, navController)
                 }
             }
