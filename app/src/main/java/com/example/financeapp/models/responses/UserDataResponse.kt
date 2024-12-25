@@ -6,6 +6,7 @@ data class UserDataResponse(
     data class UpdatedUser(
         val name: String,
         val email: String,
+        val password: String,
         val currency: String,
         val referalCode: String,
         val role: String
