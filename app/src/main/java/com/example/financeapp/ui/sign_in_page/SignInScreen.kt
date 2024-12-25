@@ -2,14 +2,19 @@ package com.example.financeapp.ui.sign_in_page
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,25 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.RegisterRequest
 import com.example.financeapp.models.responses.RegisterResponse
 import com.example.financeapp.services.RetrofitClient
+import com.example.financeapp.ui.theme.CustomPasswordInput
+import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
 import java.net.SocketTimeoutException
-
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.CustomPasswordInput
-import com.example.financeapp.ui.theme.CustomTextField
 
 
 @Composable
@@ -52,7 +47,7 @@ fun SignInScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var referalCode by remember { mutableStateOf("") }
-    var currency: List<String> = listOf("Euro", "USD", "UAH")
+    var currency: List<String> = listOf("EUR", "USD", "UAH")
     var selectedIndexDrop by rememberSaveable { mutableStateOf(0) }
     val buttonModifier = Modifier.width(280.dp)
 
@@ -131,7 +126,7 @@ fun SignInScreen(
                 },
                 border = ButtonDefaults.outlinedButtonBorder(false)
             ) {
-                Text("Зареєструватися".uppercase())
+                Text("Створити обліковий запис")
             }
             TextButton(
                 modifier = Modifier
@@ -139,7 +134,7 @@ fun SignInScreen(
                     .padding(bottom = 10.dp),
                 onClick = logInScreen,
             ) {
-                Text("Є існуючий акаунт?")
+                Text("Увійти в обліковий запис")
             }
         }
     }

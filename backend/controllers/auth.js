@@ -6,6 +6,7 @@ import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
 import { Balance } from "../models/balance.js";
 import { Category } from "../models/category.js";
+import { Record } from "../models/record.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { getBalanceId } from "./finance.js";
@@ -54,7 +55,7 @@ const register = async (req, res) => {
     });
     const newGroup = await Group.create({ adminId: newUser._id, referalCode });
     const balance = await Balance.create({ groupId: newGroup._id, currency: newUser.currency });
-    const defaultCategory = await Category.create({ title: 'other', balanceId: balance._id });
+    await Category.create({ title: 'other', balanceId: balance._id });
   }
 
   res.status(201).json({
@@ -119,13 +120,12 @@ const passwordRecovery = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const user = await User.findOne({ token: req.user.token });
+  if (user.role === 'admin') {
+    const newGroupAdminUser = await User.findOneAndUpdate( { referalCode: user.referalCode, role: "user" }, { role: "admin" },  { new: true } );
 
-    if (user.role === 'admin') {
-      const newGroupAdminUser = await User.findOneAndUpdate( { referalCode: user.referalCode, role: "user" }, { role: "admin" },  { new: true } );
-
-      if (newGroupAdminUser) {
+    if (newGroupAdminUser) {
         await Group.findOneAndUpdate( { referalCode: user.referalCode }, { adminId: newGroupAdminUser._id }, { new: true } );
-      } else {
+    } else {
         await Group.findByIdAndDelete(user.referalCode);
         const balanceId = getBalanceId(user.token);
         await Balance.findByIdAndDelete(balanceId);

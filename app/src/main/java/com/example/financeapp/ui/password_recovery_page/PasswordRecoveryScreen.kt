@@ -1,83 +1,83 @@
-package com.example.financeapp.ui.log_in_page
-
+package com.example.financeapp.ui.password_recovery_page
 
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.financeapp.models.requests.LoginRequest
-import com.example.financeapp.models.responses.LoginResponse
+import com.example.financeapp.models.requests.PasswordRecoveryRequest
+import com.example.financeapp.models.responses.PasswordRecoveryResponse
 import com.example.financeapp.services.RetrofitClient
-import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
+import com.example.pr4_calc.ui.dropdown.DropdownList
 import java.net.SocketTimeoutException
 
 
 @Composable
-fun LogInScreen(
-    authorizate: () -> Unit,
+fun PasswordRecoveryScreen(
+    redirect: () -> Unit,
+    logInScreen: () -> Unit,
     signInScreen: () -> Unit,
-    passwordRecoveryScreen: () -> Unit,
     userViewModel: UserViewModel
 ) {
     val context = LocalContext.current
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var currency: List<String> = listOf("EUR", "USD", "UAH")
+    var selectedIndexDrop by rememberSaveable { mutableStateOf(0) }
+    val buttonModifier = Modifier.width(280.dp)
 
     fun showMessageToUser(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun loginUser() {
+    fun passwordRecovery() {
         val apiService = RetrofitClient.apiService
 
-        val request = LoginRequest(
+        val request = PasswordRecoveryRequest(
+            name = name,
             email = email,
-            password = password
+            currency = currency[selectedIndexDrop]
         )
 
-        apiService.loginUser(request).enqueue(object : retrofit2.Callback<LoginResponse>  {
+        apiService.recoverPassword(request).enqueue(object : retrofit2.Callback<PasswordRecoveryResponse>  {
             override fun onResponse(
-                call: retrofit2.Call<LoginResponse>,
-                response: retrofit2.Response<LoginResponse>
+                call: retrofit2.Call<PasswordRecoveryResponse>,
+                response: retrofit2.Response<PasswordRecoveryResponse>
             ) {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     loginResponse?.token?.let {
                         userViewModel.setToken(it)
-                        Log.d("debug", "Registration successful: $it")
-                        authorizate()
+                        Log.d("debug", "Recovered password: $it")
+                        redirect()
                     }
                 } else {
-                    Log.d("debug", "Registration failed: ${response.errorBody()?.string()}")
+                    Log.d("debug", "Recovery failed: ${response.errorBody()?.string()}")
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<PasswordRecoveryResponse>, t: Throwable) {
                 if (t is SocketTimeoutException) {
                     Log.d("debug", "Timeout error: ${t.message}")
                     showMessageToUser("The server might be sleeping. Please try again (in 30s).")
@@ -94,12 +94,16 @@ fun LogInScreen(
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "FINANCE",
-            color = MaterialTheme.colorScheme.onSecondary,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 30.sp,
             modifier = Modifier.padding(0.dp, 40.dp)
         )
-        email = CustomTextField("Email", Modifier)
-        password = CustomPasswordInput("Password", Modifier)
+        name = CustomTextField("Ім'я", Modifier)
+        email = CustomTextField("Електронна пошта", Modifier)
+        DropdownList(currency, selectedIndexDrop, buttonModifier, onItemClick = {
+            selectedIndexDrop = it
+            val choosed_currency = currency[it]
+        })
         Column(modifier = Modifier.padding(0.dp, 100.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally)
@@ -110,11 +114,11 @@ fun LogInScreen(
                     .padding(bottom = 10.dp)
                     .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
                 border = ButtonDefaults.outlinedButtonBorder(false),
-                onClick = { 
-                    loginUser()
+                onClick = {
+                    passwordRecovery()
                 }
             ) {
-                Text("Авторизуватися")
+                Text("Відновити доступ")
             }
             OutlinedButton(
                 modifier = Modifier
@@ -122,17 +126,19 @@ fun LogInScreen(
                     .padding(bottom = 10.dp)
                     .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
                 border = ButtonDefaults.outlinedButtonBorder(false),
-                onClick = passwordRecoveryScreen
+                onClick = logInScreen
             ) {
-                Text("Відновити пароль")
+                Text("Увійти в обліковй запис")
             }
-            TextButton(
+            OutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp),
+                    .padding(bottom = 10.dp)
+                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
+                border = ButtonDefaults.outlinedButtonBorder(false),
                 onClick = signInScreen
             ) {
-                Text("Створити обліковий запис")
+                Text("Створити обліковй запис")
             }
         }
     }
