@@ -33,6 +33,7 @@ import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
+import org.json.JSONObject
 import java.net.SocketTimeoutException
 
 
@@ -79,6 +80,9 @@ fun SignInScreen(
                         register()
                     }
                 } else {
+                    val jsonObject = JSONObject(response.errorBody()?.string())
+                    val errorMessage = jsonObject.optString("message", "An error occurred")
+                    showMessageToUser(errorMessage)
                     Log.d("debug", "Registration failed: ${response.errorBody()?.string()}")
                 }
             }

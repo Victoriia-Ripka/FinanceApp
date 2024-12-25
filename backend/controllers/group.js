@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
 import { User } from "../models/user.js";
+import { Group } from "../models/group.js";
+import { Balance } from "../models/balance.js";
+import { Category } from "../models/category.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { nanoid } from "nanoid";
 
