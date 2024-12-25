@@ -11,13 +11,13 @@
 | **POST** | /api/users/login/ | - |  {email, password} | {token} | no |
 | **POST** | /api/users/logout/ | - |  - | {message} | yes |
 | **POST** | /api/users/password_recovery/ | - |  {name, email, currency} | {token} | no |
-| **GET** | /api/users/data/ | - |  - | {user : {name, email, currency, referalCode, role}} | yes |
-| **PUT** | /api/users/data/ |  |  {name, currency, role} | {user : {name, email, currency, referalCode, role}} | yes |
+| **GET** | /api/users/data/ | - |  - | {user : {name, email, password, currency, referalCode, role}} | yes |
+| **PUT** | /api/users/data/ |  |  {name, password} | {user : {name, email, password, currency, referalCode, role}} | yes |
 | **DELETE** | /api/users/ | - |  - | - | yes |
 |--------|-----|-------|------|----------|------|
-| **GET** | /api/currency/ | - | - | JSON object with currency data | no |
-| **GET** | /api/currency/rates/ | - | - | JSON object with currency rates | no |
-| **GET** | /api/currency/rates/main/ | - | - | JSON object with main currency rates | no |
+| **GET** | /api/currency/ | - | - | {success, symbols: { "AED": "United Arab Emirates Dirham", ...}} | no |
+| **GET** | /api/currency/rates/ | - | - | success, timestamp, base, date, rates: { "AED": 3.829626, ...} | no |
+| **GET** | /api/currency/rates/main/ | - | - | {success, timestamp, base, date, rates: { USD: 1.042646, EUR: 1, UAH: 43.648422}} | no |
 |--------|-----|-------|------|----------|------|
 | **GET** | /api/group/users/ | - | - | {referalCode, currency, users: [ {_id, name, email, role}]} | yes |
 | **DELETE** | /api/group/users/ | userId | - | - | yes |

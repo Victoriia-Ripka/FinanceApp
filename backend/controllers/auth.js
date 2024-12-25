@@ -118,11 +118,17 @@ const passwordRecovery = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const user = await User.findOneAndDelete({ token: req.user.token });
-  if (!user) {
-    res.status(404).json({ message: "User not found" });
-    return;
-  }
+  const user = await User.findOne({ token: req.user.token });
+
+    if (user.role === 'admin') {
+      const newGroupAdminUser = await User.findOneAndUpdate( { referalCode: user.referalCode, role: "user" }, { role: "admin" },  { new: true } );
+
+      if (newGroupAdminUser) {
+        await Group.findOneAndUpdate( { referalCode: user.referalCode }, { adminId: newGroupAdminUser._id }, { new: true } );
+      } 
+    }
+
+  await User.findByIdAndDelete(user._id);
   res.status(204).json({ message: "User deleted successfully" });
 }
 
@@ -138,6 +144,7 @@ const getUserData = async (req, res) => {
       name: user.name,
       email: user.email,
       currency: user.currency,
+      password: user.password,
       role: user.role,
       referalCode: user.referalCode
     }
@@ -147,18 +154,21 @@ const getUserData = async (req, res) => {
 const updateUserData = async (req, res) => {
   const user = await User.findOne({ token: req.user.token });
 
-  const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
-
-  if (req.body.currency && req.body.currency !== user.currency) {
-    const balanceId = await getBalanceId(req.user.token);
-    await Balance.findByIdAndUpdate(balanceId, { currency: updatedUser.currency }, { new: true });
+  if (req.body.name) {
+    const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
   }
+
+  if (req.body.password) {
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
+    const updatedUser = await User.findByIdAndUpdate(user._id, { password: hashPassword }, { new: true });
+  }  
 
   res.status(200).json({
     user: {
       name: updatedUser.name,
       email: updatedUser.email,
       currency: updatedUser.currency,
+      password: updatedUser.password,
       role: updatedUser.role,
       referalCode: updatedUser.referalCode
     }
