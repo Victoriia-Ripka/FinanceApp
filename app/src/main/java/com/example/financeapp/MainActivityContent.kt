@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.account_page.AccountContent
 import com.example.financeapp.ui.add_record_page.AddRecordContent
+import com.example.financeapp.ui.course_page.CourseInfoContent
 import com.example.financeapp.ui.group_page.GroupContent
 import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainContent
@@ -85,7 +86,16 @@ fun MainActivityContent() {
                     Drawer(content, navController)
                 }
                 composable(route = Routes.ADD_RECORD.name) {
-                    val content = AddRecordContent(userViewModel = userViewModel)
+                    val content = AddRecordContent(
+                        userViewModel = userViewModel,
+                        mainPage = { navController.navigate(route = Routes.MAIN_PAGE.name )}
+                    )
+                    Drawer(content, navController)
+                }
+                composable(route = Routes.COURSE.name) {
+                    val content = CourseInfoContent(
+                        userViewModel = userViewModel
+                    )
                     Drawer(content, navController)
                 }
             }
