@@ -16,8 +16,8 @@ import com.example.financeapp.ui.course_page.CourseInfoContent
 import com.example.financeapp.ui.group_page.GroupContent
 import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainContent
-import com.example.financeapp.ui.sign_in_page.SignInScreen
 import com.example.financeapp.ui.password_recovery_page.PasswordRecoveryScreen
+import com.example.financeapp.ui.sign_in_page.SignInScreen
 import com.example.financeapp.ui.theme.FinanceAppTheme
 import com.example.financeapp.viewmodel.UserViewModel
 

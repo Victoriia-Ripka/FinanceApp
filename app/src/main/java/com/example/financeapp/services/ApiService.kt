@@ -54,8 +54,8 @@ interface ApiService {
     @GET("group/users/")
     fun getGroupUsers(@Header("Authorization") token: String): Call<GroupResponse>
 
-//    @DELETE("group/users/")
-//    fun updateUserData(@Header("Authorization") token: String, @Query("userId") userId: String ): Call<Void>
+    @DELETE("group/users/")
+    fun deleteUser(@Header("Authorization") token: String, @Query("userId") userId: String ): Call<Void>
 
 //    POST	/api/finance/categories/
 

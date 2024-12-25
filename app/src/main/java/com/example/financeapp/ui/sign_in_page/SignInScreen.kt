@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,22 +29,11 @@ import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.RegisterRequest
 import com.example.financeapp.models.responses.RegisterResponse
 import com.example.financeapp.services.RetrofitClient
+import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
 import java.net.SocketTimeoutException
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.unit.sp
-import com.example.financeapp.ui.theme.CustomPasswordInput
-import com.example.financeapp.ui.theme.CustomTextField
 
 
 @Composable
