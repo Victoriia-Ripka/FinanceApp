@@ -11,15 +11,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -27,6 +31,10 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +53,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,9 +68,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse.Category
 import java.text.SimpleDateFormat
@@ -290,8 +301,79 @@ fun convertMillisToDate(millis: Long): String {
 
 // ----------------------------------
 
+@Composable
+fun ChangeValueDialog(
+    onDismissRequest: () -> Unit,
+    label: String,
+    placeholder: String
+) :String{
+    var new_value by remember { mutableStateOf("") }
+    var isDone by remember { mutableStateOf(false) }
+
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        Card(
+            modifier = Modifier
+//                .fillMaxWidth()
+                .width(460.dp)
+                .padding(10.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.primary
+            )
+        ) {
+            Column (
+                modifier = Modifier
+                    .padding(30.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        label,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        textAlign = TextAlign.Center)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    new_value = CustomTextField(placeholder, Modifier, fontSize = 12.sp)
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    TextButton(
+                        onClick = {
+                            new_value = ""
+                            onDismissRequest()
+                        },
+//                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp),
+                    ) {
+                        Text("Вийти", fontSize = 14.sp)
+                    }
+                    TextButton(
+                        onClick = { onDismissRequest() },
+//                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp),
+                    ) {
+                        Text("Підтвердити", fontSize = 14.sp)
+                    }
+                }
+            }
+        }
+    }
+    return new_value
+}
+
+
+// ----------------------------------
+
 // maybe will use in the future
 // !!! Only patterns, they are not done yet !!!
+
 
 @Composable
 fun EmailInputField() {
