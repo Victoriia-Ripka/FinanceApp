@@ -59,6 +59,7 @@ import com.example.financeapp.ui.account_page.AccountScreen
 import com.example.financeapp.ui.log_in_page.LogInScreen
 import com.example.financeapp.ui.main_page.MainScreen
 import com.example.financeapp.ui.sign_in_page.SignInScreen
+import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
 import com.example.financeapp.ui.theme.onBackgroundLight
 import kotlinx.coroutines.launch
 
@@ -152,12 +153,12 @@ fun Drawer(
                 titleContentColor = MaterialTheme.colorScheme.primary,
             ),
             title = {
-                Text(
+                CustomTextInknutAntiquaFont(
                     text = "Finance",
                     modifier = Modifier
-                        .padding(start = 200.dp)
-                        .offset(y = (-10).dp),
-                    maxLines = 1,
+                        .padding(start = 180.dp)
+                        .offset(y = 0.dp),
+//                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
 
                 )
@@ -171,7 +172,7 @@ fun Drawer(
                     },
                     modifier = Modifier
                         .padding(start = 20.dp)
-                        .offset(y = (-10).dp)
+                        .offset(y = 0.dp)
                 )
                 {
                     Icon(

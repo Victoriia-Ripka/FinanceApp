@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.RegisterRequest
@@ -31,6 +32,8 @@ import com.example.financeapp.models.responses.RegisterResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
+import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
+import com.example.financeapp.ui.theme.CustomTitleInknutAntiquaFont
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
 import java.net.SocketTimeoutException
@@ -98,10 +101,8 @@ fun SignInScreen(
     Column(modifier = Modifier.padding(60.dp, 60.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
+        CustomTitleInknutAntiquaFont(
             text = "FINANCE",
-            color = MaterialTheme.colorScheme.onSecondary,
-            fontSize = 30.sp,
             modifier = Modifier.padding(0.dp, 40.dp)
         )
         name = CustomTextField("Ім'я", Modifier)
@@ -120,13 +121,13 @@ fun SignInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
+                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(25)),
                 onClick = { 
                     registerUser()
                 },
                 border = ButtonDefaults.outlinedButtonBorder(false)
             ) {
-                Text("Створити обліковий запис")
+                CustomTextInknutAntiquaFont("Зареєструватися")
             }
             TextButton(
                 modifier = Modifier

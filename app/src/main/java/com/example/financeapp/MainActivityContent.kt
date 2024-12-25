@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.account_page.AccountContent
+import com.example.financeapp.ui.add_category_page.AddCategoryContent
 import com.example.financeapp.ui.add_record_page.AddRecordContent
 import com.example.financeapp.ui.course_page.CourseInfoContent
 import com.example.financeapp.ui.group_page.GroupContent
@@ -29,6 +30,7 @@ enum class Routes {
     ACCOUNT,
     GROUP, // I
     ADD_RECORD,
+    ADD_CATEGORY,
     STATISTICS,
     COURSE,
 }
@@ -88,13 +90,21 @@ fun MainActivityContent() {
                 composable(route = Routes.ADD_RECORD.name) {
                     val content = AddRecordContent(
                         userViewModel = userViewModel,
-                        mainPage = { navController.navigate(route = Routes.MAIN_PAGE.name )}
+                        mainPage = { navController.navigate(route = Routes.MAIN_PAGE.name )},
+                        addCategoryPage = { navController.navigate(route = Routes.ADD_CATEGORY.name )}
                     )
                     Drawer(content, navController)
                 }
                 composable(route = Routes.COURSE.name) {
                     val content = CourseInfoContent(
                         userViewModel = userViewModel
+                    )
+                    Drawer(content, navController)
+                }
+                composable(route = Routes.ADD_CATEGORY.name) {
+                    val content = AddCategoryContent(
+                        userViewModel = userViewModel,
+                        addRecordPage = { navController.navigate(route = Routes.ADD_RECORD.name )}
                     )
                     Drawer(content, navController)
                 }
