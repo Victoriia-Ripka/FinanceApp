@@ -196,7 +196,10 @@ fun AccountContent(
                             showMessageToUser("User logouted successfully!")
                             logout()
                         } else {
-                            showMessageToUser("Error: ${response.message()}")
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Logout failed: ${jsonObject}")
                         }
                     }
 
@@ -218,7 +221,10 @@ fun AccountContent(
                             showMessageToUser("Account deleted successfully!")
                             deleted()
                         } else {
-                            showMessageToUser("Error: ${response.message()}")
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Deleting account failed: ${jsonObject}")
                         }
                     }
 
@@ -299,6 +305,7 @@ fun AccountContent(
                         }
                         if(openEditNameDialog) {
                             editNameDialog()
+                            getUserData()
                         } else {
                             if(name != "") {
                                 Log.d("debug", name)
@@ -338,10 +345,11 @@ fun AccountContent(
                             }
                             if(openEditPassDialog) {
                                 editPassDialog()
+                                getUserData()
                             } else {
                                 if(password != "") {
                                     Log.d("debug", password)
-//                                    editPassword(password)
+                                    editPassword(password)
                                 }
                             }
                         }
