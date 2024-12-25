@@ -4,6 +4,7 @@ import com.example.financeapp.models.requests.LoginRequest
 import com.example.financeapp.models.requests.PasswordRecoveryRequest
 import com.example.financeapp.models.requests.RegisterRequest
 import com.example.financeapp.models.requests.UpdateUserRequest
+import com.example.financeapp.models.responses.CurrenciesResponse
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse
 import com.example.financeapp.models.responses.CurrentBalanceResponse
 import com.example.financeapp.models.responses.GroupResponse
@@ -48,8 +49,8 @@ interface ApiService {
 //    @GET("currency/rates/")
 //    fun getCurrenciesRates(): Call<ExampleResponse>
 
-//    @GET("currency/rates/main/")
-//    fun getMainCurrenciesRates(): Call<ExampleResponse>
+    @GET("currency/rates/main/")
+    fun getMainCurrenciesRates(): Call<CurrenciesResponse>
 
     @GET("group/users/")
     fun getGroupUsers(@Header("Authorization") token: String): Call<GroupResponse>
