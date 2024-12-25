@@ -26,6 +26,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.LoginRequest
@@ -33,6 +35,8 @@ import com.example.financeapp.models.responses.LoginResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
+import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
+import com.example.financeapp.ui.theme.CustomTitleInknutAntiquaFont
 import com.example.financeapp.viewmodel.UserViewModel
 import org.json.JSONObject
 import java.net.SocketTimeoutException
@@ -96,10 +100,8 @@ fun LogInScreen(
     Column(modifier = Modifier.padding(60.dp, 60.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
+        CustomTitleInknutAntiquaFont(
             text = "FINANCE",
-            color = MaterialTheme.colorScheme.onSecondary,
-            fontSize = 30.sp,
             modifier = Modifier.padding(0.dp, 40.dp)
         )
         email = CustomTextField("Email", Modifier)
@@ -112,13 +114,13 @@ fun LogInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
+                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(25)),
                 border = ButtonDefaults.outlinedButtonBorder(false),
                 onClick = { 
                     loginUser()
                 }
             ) {
-                Text("Авторизуватися")
+                CustomTextInknutAntiquaFont("Авторизуватися")
             }
             TextButton(
                 modifier = Modifier

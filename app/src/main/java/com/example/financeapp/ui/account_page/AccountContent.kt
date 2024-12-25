@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +43,7 @@ import com.example.financeapp.models.requests.UpdateUserRequest
 import com.example.financeapp.models.responses.UserDataResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.ChangeValueDialog
+import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
 import com.example.financeapp.viewmodel.UserViewModel
 import org.json.JSONObject
 import retrofit2.Call
@@ -388,32 +390,32 @@ fun AccountContent(
 
                     OutlinedButton(
                         modifier = Modifier
+                            .absoluteOffset(y = 310.dp)
+                            .fillMaxWidth()
+                            .border(
+                                2.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(25)
+                            ),
+                        onClick = { logOut() },
+                        border = ButtonDefaults.outlinedButtonBorder(false)
+                    ) {
+                        CustomTextInknutAntiquaFont(text = "Вийти з облікового запису")
+                    }
+
+                    OutlinedButton(
+                        modifier = Modifier
                             .absoluteOffset(y = 320.dp)
                             .fillMaxWidth()
                             .border(
                                 2.dp,
                                 color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(50)
-                            ),
-                        onClick = { logOut() },
-                        border = ButtonDefaults.outlinedButtonBorder(false)
-                    ) {
-                        Text(text = "Вийти з облікового запису".uppercase())
-                    }
-
-                    OutlinedButton(
-                        modifier = Modifier
-                            .absoluteOffset(y = 330.dp)
-                            .fillMaxWidth()
-                            .border(
-                                2.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = RoundedCornerShape(50)
+                                shape = RoundedCornerShape(25)
                             ),
                         onClick = { delete() },
                         border = ButtonDefaults.outlinedButtonBorder(false)
                     ) {
-                        Text(text = "Видалити акаунт".uppercase())
+                        CustomTextInknutAntiquaFont(text = "Видалити акаунт")
                     }
                 }
             }

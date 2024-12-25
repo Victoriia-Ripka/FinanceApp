@@ -30,6 +30,13 @@ val displayFontFamily = FontFamily(
     )
 )
 
+val additionalFontFamily = FontFamily(
+    Font(
+        googleFont = GoogleFont("Inknut Antiqua"),
+        fontProvider = provider,
+    )
+)
+
 // Default Material 3 typography values
 val baseline = Typography()
 

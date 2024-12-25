@@ -13,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,12 +23,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.PasswordRecoveryRequest
 import com.example.financeapp.models.responses.PasswordRecoveryResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.CustomTextField
+import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
+import com.example.financeapp.ui.theme.CustomTitleInknutAntiquaFont
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
 import org.json.JSONObject
@@ -96,10 +100,8 @@ fun PasswordRecoveryScreen(
     Column(modifier = Modifier.padding(60.dp, 60.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
+        CustomTitleInknutAntiquaFont(
             text = "FINANCE",
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = 30.sp,
             modifier = Modifier.padding(0.dp, 40.dp)
         )
         name = CustomTextField("Ім'я", Modifier)
@@ -116,30 +118,25 @@ fun PasswordRecoveryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
+                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(25)),
                 border = ButtonDefaults.outlinedButtonBorder(false),
                 onClick = {
                     passwordRecovery()
                 }
             ) {
-                Text("Відновити доступ")
+                CustomTextInknutAntiquaFont("Відновити доступ")
             }
-            OutlinedButton(
+            TextButton(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
-                border = ButtonDefaults.outlinedButtonBorder(false),
+                    .fillMaxWidth(),
                 onClick = logInScreen
             ) {
                 Text("Увійти в обліковй запис")
             }
-            OutlinedButton(
+            TextButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
-                border = ButtonDefaults.outlinedButtonBorder(false),
+                    .padding(bottom = 10.dp),
                 onClick = signInScreen
             ) {
                 Text("Створити обліковй запис")

@@ -37,13 +37,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse.Category
 import com.example.financeapp.services.RetrofitClient.apiService
+import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.theme.CustomChipSelector
 import com.example.financeapp.ui.theme.CustomTextField
+import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
 import com.example.financeapp.ui.theme.DatePickerFieldToModal
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
@@ -54,7 +57,8 @@ import retrofit2.Response
 
 fun AddRecordContent(
     userViewModel: UserViewModel,
-    mainPage: () -> Unit
+    mainPage: () -> Unit,
+    addCategoryPage: () -> Unit
 ): @Composable () -> Unit {
 
     val activeTextColor = Color(0xFFFFFFFF)
@@ -228,6 +232,10 @@ fun AddRecordContent(
                         modifier = Modifier,
                         onItemClick = {
                             selectedIndexDrop = it
+                            if(categoryList[selectedIndexDrop] == "+ Додати категорію"){
+                                Log.d("debug", "add category clicked")
+                                addCategoryPage()
+                            }
                         })
 
 //                    CustomCategoryPicker()
@@ -295,11 +303,11 @@ fun AddRecordContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 10.dp)
-                            .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
+                            .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(25)),
                         border = ButtonDefaults.outlinedButtonBorder(false),
                         onClick = mainPage
                     ) {
-                        Text("Додати".uppercase())
+                        CustomTextInknutAntiquaFont("Додати")
                     }
                 }
             }
