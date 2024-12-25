@@ -125,7 +125,13 @@ const deleteUser = async (req, res) => {
 
       if (newGroupAdminUser) {
         await Group.findOneAndUpdate( { referalCode: user.referalCode }, { adminId: newGroupAdminUser._id }, { new: true } );
-      } 
+      } else {
+        await Group.findByIdAndDelete(user.referalCode);
+        const balanceId = getBalanceId(user.token);
+        await Balance.findByIdAndDelete(balanceId);
+        await Category.deleteMany({ balanceId: balanceId });
+        await Record.deleteMany({ balanceId: balanceId });
+      }
     }
 
   await User.findByIdAndDelete(user._id);
