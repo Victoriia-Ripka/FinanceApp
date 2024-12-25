@@ -30,6 +30,7 @@ import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
 import com.example.pr4_calc.ui.dropdown.DropdownList
+import org.json.JSONObject
 import java.net.SocketTimeoutException
 
 
@@ -73,6 +74,9 @@ fun PasswordRecoveryScreen(
                         redirect()
                     }
                 } else {
+                    val jsonObject = JSONObject(response.errorBody()?.string())
+                    val errorMessage = jsonObject.optString("message", "An error occurred")
+                    showMessageToUser(errorMessage)
                     Log.d("debug", "Recovery failed: ${response.errorBody()?.string()}")
                 }
             }

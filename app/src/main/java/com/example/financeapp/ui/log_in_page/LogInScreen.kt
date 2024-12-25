@@ -34,6 +34,7 @@ import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.CustomPasswordInput
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.viewmodel.UserViewModel
+import org.json.JSONObject
 import java.net.SocketTimeoutException
 
 
@@ -73,6 +74,9 @@ fun LogInScreen(
                         authorizate()
                     }
                 } else {
+                    val jsonObject = JSONObject(response.errorBody()?.string())
+                    val errorMessage = jsonObject.optString("message", "An error occurred")
+                    showMessageToUser(errorMessage)
                     Log.d("debug", "Registration failed: ${response.errorBody()?.string()}")
                 }
             }

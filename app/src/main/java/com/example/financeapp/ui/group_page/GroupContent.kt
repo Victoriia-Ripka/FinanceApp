@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.responses.GroupResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.viewmodel.UserViewModel
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -114,10 +115,13 @@ fun GroupContent(
                 ) {
                     if (response.isSuccessful) {
                         showMessageToUser("User deleted successfully!")
-                        getUsers()
                     } else {
-                        showMessageToUser("Error: ${response.message()}")
+                        val jsonObject = JSONObject(response.errorBody()?.string())
+                        val errorMessage = jsonObject.optString("message", "An error occurred")
+                        showMessageToUser(errorMessage)
+                        Log.d("debug", "Deleting user from group failed: ${jsonObject}")
                     }
+                    getUsers()
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
