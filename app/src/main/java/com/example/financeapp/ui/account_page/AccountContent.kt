@@ -23,15 +23,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.requests.UpdateUserRequest
 import com.example.financeapp.models.responses.UserDataResponse
 import com.example.financeapp.services.RetrofitClient
+import com.example.financeapp.ui.theme.ChangeValueDialog
 import com.example.financeapp.viewmodel.UserViewModel
 import org.json.JSONObject
 import retrofit2.Call
@@ -82,6 +85,13 @@ fun AccountContent(
                     )
                 )
             }
+
+            var name by remember { mutableStateOf("") }
+            var password by remember { mutableStateOf("") }
+
+            var openEditNameDialog by remember { mutableStateOf(false) }
+            var openEditPassDialog by remember { mutableStateOf(false) }
+
 
             fun showMessageToUser(message: String) {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -218,6 +228,34 @@ fun AccountContent(
                 })
             }
 
+            @Composable
+            fun editNameDialog(){
+                when {
+                    // ...
+                    openEditNameDialog -> {
+                        name = ChangeValueDialog(
+                        onDismissRequest = { openEditNameDialog = false },
+                        label = "Зміна імені користувача",
+                        placeholder = "Нове ім'я"
+                        )
+                    }
+                }
+            }
+
+            @Composable
+            fun editPassDialog(){
+                when {
+                    // ...
+                    openEditPassDialog -> {
+                        password = ChangeValueDialog(
+                            onDismissRequest = { openEditPassDialog = false },
+                            label = "Зміна паролю користувача",
+                            placeholder = "Новий пароль"
+                        )
+                    }
+                }
+            }
+
             if( token != null ) {
                 DisposableEffect(Unit) {
                     getUserData()
@@ -251,7 +289,7 @@ fun AccountContent(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 Text(text = user.value.user.name, color = contentColor)
-                                IconButton(onClick = { editName("new name") }) {
+                                IconButton(onClick = { openEditNameDialog = true }) {
                                     Icon(
                                         Icons.Filled.Edit,
                                         "Edit name",
@@ -259,6 +297,15 @@ fun AccountContent(
                                 }
                             }
                         }
+                        if(openEditNameDialog) {
+                            editNameDialog()
+                        } else {
+                            if(name != "") {
+                                Log.d("debug", name)
+                                editName(name)
+                            }
+                        }
+
                         HorizontalDivider(color = Color(0xFF222831))
 
                         Row(
@@ -276,21 +323,37 @@ fun AccountContent(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
-                            Text(text = "Основна валюта", color = contentColorConst)
+                            Text(text = "Пароль", color = contentColorConst)
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text(text = user.value.user.currency, color = contentColor)
-                                if(user.value.user.role == "admin") {
-                                    IconButton(onClick = { editCurrency("UAH") }) {
-                                        Icon(
-                                            Icons.Filled.Edit,
-                                            "Edit currency",
-                                            tint = contentColor)
-                                    }
+                                Text(text = "3gsif9slf3", color = contentColor)
+                                IconButton(onClick = { openEditPassDialog = true }) {
+                                    Icon(
+                                        Icons.Filled.Edit,
+                                        "Edit password",
+                                        tint = contentColor)
                                 }
                             }
+                            if(openEditPassDialog) {
+                                editPassDialog()
+                            } else {
+                                if(password != "") {
+                                    Log.d("debug", password)
+//                                    editPassword(password)
+                                }
+                            }
+                        }
+                        HorizontalDivider(color = Color(0xFF222831))
+
+                        Row(
+                            modifier = infoRowModifier,
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text(text = "Основна валюта", color = contentColorConst)
+                            Text(text = user.value.user.currency, color = contentColor)
                         }
                         HorizontalDivider(color = Color(0xFF222831))
 
@@ -317,7 +380,7 @@ fun AccountContent(
 
                     OutlinedButton(
                         modifier = Modifier
-                            .absoluteOffset(y = 340.dp)
+                            .absoluteOffset(y = 320.dp)
                             .fillMaxWidth()
                             .border(
                                 2.dp,
@@ -332,7 +395,7 @@ fun AccountContent(
 
                     OutlinedButton(
                         modifier = Modifier
-                            .absoluteOffset(y = 350.dp)
+                            .absoluteOffset(y = 330.dp)
                             .fillMaxWidth()
                             .border(
                                 2.dp,

@@ -120,12 +120,9 @@ fun LogInScreen(
             ) {
                 Text("Авторизуватися")
             }
-            OutlinedButton(
+            TextButton(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 10.dp)
-                    .border(2.dp, color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(50)),
-                border = ButtonDefaults.outlinedButtonBorder(false),
+                    .fillMaxWidth(),
                 onClick = passwordRecoveryScreen
             ) {
                 Text("Відновити пароль")
