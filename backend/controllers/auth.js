@@ -6,6 +6,7 @@ import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
 import { Balance } from "../models/balance.js";
 import { Category } from "../models/category.js";
+import { Record } from "../models/record.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { getBalanceId } from "./finance.js";
@@ -54,7 +55,7 @@ const register = async (req, res) => {
     });
     const newGroup = await Group.create({ adminId: newUser._id, referalCode });
     const balance = await Balance.create({ groupId: newGroup._id, currency: newUser.currency });
-    const defaultCategory = await Category.create({ title: 'other', balanceId: balance._id });
+    await Category.create({ title: 'other', balanceId: balance._id });
   }
 
   res.status(201).json({
@@ -118,11 +119,23 @@ const passwordRecovery = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const user = await User.findOneAndDelete({ token: req.user.token });
+  const user = await User.findOne({ token: req.user.token });
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
   }
+  if (user.role === 'admin') {
+    await Group.findByIdAndDelete(user.referalCode);
+    const balanceId = getBalanceId(user.token);
+    await Balance.findByIdAndDelete(balanceId);
+    await Category.deleteMany({ balanceId: balanceId });
+    await Record.deleteMany({ balanceId: balanceId });
+    const users = await User.find({ role: "user", referalCode: user.referalCode });
+    await Promise.all(users.map(async (u) => await User.findByIdAndDelete(u._id)));
+  } else {
+    await User.findByIdAndDelete(user._id);
+  } 
+
   res.status(204).json({ message: "User deleted successfully" });
 }
 

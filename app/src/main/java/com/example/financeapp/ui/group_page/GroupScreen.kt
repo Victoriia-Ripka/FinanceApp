@@ -1,5 +1,4 @@
-package com.example.financeapp.ui.account_page
-
+package com.example.financeapp.ui.group_page
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun AccountScreen() {
+fun GroupScreen() {
     val content = @Composable{
         Box() {
             Column(
