@@ -101,7 +101,7 @@ const passwordRecovery = async (req, res) => {
   const { email, name, currency } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user || user.name!== name || user.currency!== currency) {
+  if (!user || user.name !== name || user.currency !== currency) {
     res.status(404).json({ message: "Data doesn't match" });
     return;
   }
@@ -121,18 +121,18 @@ const passwordRecovery = async (req, res) => {
 const deleteUser = async (req, res) => {
   const user = await User.findOne({ token: req.user.token });
   if (user.role === 'admin') {
-    const newGroupAdminUser = await User.findOneAndUpdate( { referalCode: user.referalCode, role: "user" }, { role: "admin" },  { new: true } );
+    const newGroupAdminUser = await User.findOneAndUpdate({ referalCode: user.referalCode, role: "user" }, { role: "admin" }, { new: true });
 
     if (newGroupAdminUser) {
-        await Group.findOneAndUpdate( { referalCode: user.referalCode }, { adminId: newGroupAdminUser._id }, { new: true } );
+      await Group.findOneAndUpdate({ referalCode: user.referalCode }, { adminId: newGroupAdminUser._id }, { new: true });
     } else {
-        await Group.findByIdAndDelete(user.referalCode);
-        const balanceId = getBalanceId(user.token);
-        await Balance.findByIdAndDelete(balanceId);
-        await Category.deleteMany({ balanceId: balanceId });
-        await Record.deleteMany({ balanceId: balanceId });
-      }
+      await Group.findByIdAndDelete(user.referalCode);
+      const balanceId = getBalanceId(user.token);
+      await Balance.findByIdAndDelete(balanceId);
+      await Category.deleteMany({ balanceId: balanceId });
+      await Record.deleteMany({ balanceId: balanceId });
     }
+  }
 
   await User.findByIdAndDelete(user._id);
   res.status(204).json({ message: "User deleted successfully" });
@@ -160,25 +160,38 @@ const getUserData = async (req, res) => {
 const updateUserData = async (req, res) => {
   const user = await User.findOne({ token: req.user.token });
 
+
+
   if (req.body.name) {
     const updatedUser = await User.findByIdAndUpdate(user._id, req.body, { new: true });
+    res.status(200).json({
+      user: {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        currency: updatedUser.currency,
+        password: updatedUser.password,
+        role: updatedUser.role,
+        referalCode: updatedUser.referalCode
+      }
+    });
   }
 
   if (req.body.password) {
     const hashPassword = await bcrypt.hash(req.body.password, 10);
     const updatedUser = await User.findByIdAndUpdate(user._id, { password: hashPassword }, { new: true });
-  }  
+    res.status(200).json({
+      user: {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        currency: updatedUser.currency,
+        password: updatedUser.password,
+        role: updatedUser.role,
+        referalCode: updatedUser.referalCode
+      }
+    });
+  }
 
-  res.status(200).json({
-    user: {
-      name: updatedUser.name,
-      email: updatedUser.email,
-      currency: updatedUser.currency,
-      password: updatedUser.password,
-      role: updatedUser.role,
-      referalCode: updatedUser.referalCode
-    }
-  });
+
 };
 
 export const actions = {

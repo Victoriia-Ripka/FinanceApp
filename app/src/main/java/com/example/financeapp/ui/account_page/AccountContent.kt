@@ -43,6 +43,7 @@ import com.example.financeapp.models.responses.UserDataResponse
 import com.example.financeapp.services.RetrofitClient
 import com.example.financeapp.ui.theme.ChangeValueDialog
 import com.example.financeapp.viewmodel.UserViewModel
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -76,6 +77,7 @@ fun AccountContent(
                         user = UserDataResponse.UpdatedUser(
                             name = "",
                             email = "",
+                            password = "",
                             currency = "",
                             referalCode = "",
                             role = ""
@@ -98,8 +100,7 @@ fun AccountContent(
             fun editName(newName: String) {
                 val request = UpdateUserRequest(
                     name = newName,
-                    currency = user.value.user.currency,
-                    role = user.value.user.role
+                    password = user.value.user.password
                 )
 
                 val call = apiService.updateUserData("Bearer $token", request)
@@ -114,7 +115,10 @@ fun AccountContent(
                                 showMessageToUser("Name updated successfully!")
                             }
                         } else {
-                            showMessageToUser("Error: ${response.message()}")
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Editing name failed: ${jsonObject}")
                         }
                     }
 
@@ -124,11 +128,10 @@ fun AccountContent(
                 })
             }
 
-            fun editCurrency(newCurrency: String){
+            fun editPassword(newPassword: String){
                 val request = UpdateUserRequest(
                     name = user.value.user.name,
-                    currency = newCurrency,
-                    role = user.value.user.role
+                    password = newPassword
                 )
 
                 val call = apiService.updateUserData("Bearer $token", request)
@@ -140,10 +143,38 @@ fun AccountContent(
                         if (response.isSuccessful) {
                             response.body()?.let { responseBody ->
                                 user.value = responseBody
-                                showMessageToUser("Currency updated successfully!")
+                                showMessageToUser("Password updated successfully!")
                             }
                         } else {
-                            showMessageToUser("Error: ${response.message()}")
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Editing password failed: ${jsonObject}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserDataResponse>, t: Throwable) {
+                        showMessageToUser("Error: ${t.localizedMessage}")
+                    }
+                })
+            }
+
+            fun getUserData() {
+                val call = apiService.getUserData("Bearer $token")
+                call.enqueue(object : Callback<UserDataResponse> {
+                    override fun onResponse(
+                        call: Call<UserDataResponse>,
+                        response: Response<UserDataResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            response.body()?.let { responseBody ->
+                                user.value = responseBody
+                            }
+                        } else {
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Fetching user data failed: ${jsonObject}")
                         }
                     }
 
@@ -165,7 +196,10 @@ fun AccountContent(
                             showMessageToUser("User logouted successfully!")
                             logout()
                         } else {
-                            showMessageToUser("Error: ${response.message()}")
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Logout failed: ${jsonObject}")
                         }
                     }
 
@@ -187,7 +221,10 @@ fun AccountContent(
                             showMessageToUser("Account deleted successfully!")
                             deleted()
                         } else {
-                            showMessageToUser("Error: ${response.message()}")
+                            val jsonObject = JSONObject(response.errorBody()?.string())
+                            val errorMessage = jsonObject.optString("message", "An error occurred")
+                            showMessageToUser(errorMessage)
+                            Log.d("debug", "Deleting account failed: ${jsonObject}")
                         }
                     }
 
@@ -227,28 +264,8 @@ fun AccountContent(
 
             if( token != null ) {
                 DisposableEffect(Unit) {
-                    val call = apiService.getUserData("Bearer $token")
-                    call.enqueue(object : Callback<UserDataResponse> {
-                        override fun onResponse(
-                            call: Call<UserDataResponse>,
-                            response: Response<UserDataResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                response.body()?.let { responseBody ->
-                                    user.value = responseBody
-                                }
-                            } else {
-                                showMessageToUser("Error: ${response.message()}")
-                            }
-                        }
-
-                        override fun onFailure(call: Call<UserDataResponse>, t: Throwable) {
-                            showMessageToUser("Error: ${t.localizedMessage}")
-                        }
-                    })
-                    onDispose {
-                        call.cancel()
-                    }
+                    getUserData()
+                    onDispose {}
                 }
 
                 Column(
@@ -288,6 +305,7 @@ fun AccountContent(
                         }
                         if(openEditNameDialog) {
                             editNameDialog()
+                            getUserData()
                         } else {
                             if(name != "") {
                                 Log.d("debug", name)
@@ -327,10 +345,11 @@ fun AccountContent(
                             }
                             if(openEditPassDialog) {
                                 editPassDialog()
+                                getUserData()
                             } else {
                                 if(password != "") {
                                     Log.d("debug", password)
-//                                    editPassword(password)
+                                    editPassword(password)
                                 }
                             }
                         }
