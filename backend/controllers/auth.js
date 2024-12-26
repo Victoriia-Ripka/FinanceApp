@@ -19,9 +19,9 @@ const { SECRET_KEY } = process.env;
 const createVarifyEmail = (email, newPassword) => {
   return {
     to: email,
-    subject: "Contacts App. Password recovery",
-    text: `Here is your temperary password: ${newPassword}`,
-    html: `<p>Here is your temperary password: ${newPassword}</p>`,
+    subject: "Finance App. Password recovery",
+    text: `Here is your new password: ${newPassword}`,
+    html: `<p>Here is your new password: ${newPassword}</p>`,
   };
 };
 
