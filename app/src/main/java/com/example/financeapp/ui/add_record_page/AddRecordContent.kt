@@ -37,13 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse
 import com.example.financeapp.models.responses.CurrentBalanceCategoriesResponse.Category
 import com.example.financeapp.services.RetrofitClient.apiService
-import com.example.financeapp.ui.Drawer
 import com.example.financeapp.ui.theme.CustomChipSelector
 import com.example.financeapp.ui.theme.CustomTextField
 import com.example.financeapp.ui.theme.CustomTextInknutAntiquaFont
