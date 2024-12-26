@@ -32,7 +32,8 @@
 | **GET** | /api/finance/balance/current/categories/ | - | - | {currency, currentMonth, categories: [title, total, categoryId]} | yes |
 | **GET** | /api/finance/balance/current/category/ | categoryId | - | {category: {title, total, currency, records: [{_id, type, title, value, date}]}} | yes |
 |--------|-----|-------|------|----------|------|
-| **GET** | /api/statistics/ | - |  - | {totalSpent, totalIncome, totalEarnings, totalSavings, totalExpenditure, totalCategories,} | yes |
+| **GET** | /api/statistics/month/ | ?type=[income/expense]&month=MM&year=YYYY |  - | {currency, resolvedMonth, resolvedYear, total, categories: [{title, total, categoryId, percentage}], cashPercentage, cardPercentage} | yes |
+| **GET** | /api/statistics/month/ | ?type=[income/expense]&year=YYYY |  - | {currency, resolvedYear, total, categories: [{title, total, categoryId, percentage}], cashPercentage, cardPercentage} | yes |
 |--------|-----|-------|------|----------|------|
 
 - req = "date": "12.12.2024" (MM.DD.YYYY) | res = "date": "2024-12-11T23:00:00.000Z" (YYYYDD-MMTHH:MM:SS.000Z)
