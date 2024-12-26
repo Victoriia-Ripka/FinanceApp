@@ -10,10 +10,20 @@ import { Record } from "../models/record.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { getBalanceId } from "./finance.js";
+import { SendEmail } from "../helpers";
 
 dotenv.config();
 
 const { SECRET_KEY } = process.env;
+
+const createVarifyEmail = (email, newPassword) => {
+  return {
+    to: email,
+    subject: "Contacts App. Password recovery",
+    text: `Here is your temperary password: ${newPassword}`,
+    html: `<p>Here is your temperary password: ${newPassword}</p>`,
+  };
+};
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -114,6 +124,10 @@ const passwordRecovery = async (req, res) => {
 
   const newPassword = nanoid(6);
   const updatedUSer = await User.findByIdAndUpdate(user._id, { password: await bcrypt.hash(newPassword, 10), token }, { new: true });
+
+
+  const verifyEmail = createVarifyEmail(email, newPassword);
+  await sendEmail(verifyEmail);
 
   res.status(200).json({ token: updatedUSer.token });
 };
