@@ -10,7 +10,7 @@ import { Record } from "../models/record.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../helpers/CtrlWrapper.js";
 import { getBalanceId } from "./finance.js";
-import { sendEmail } from "../helpers/SendEmail.js";
+import sendEmail from "../helpers/SendEmail.js";
 
 dotenv.config();
 
