@@ -119,11 +119,10 @@ const getCurrentMonthCategoriesBalance = async (req, res) => {
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   const userCategories = await Category.find({ balanceId }).select({ title: 1, _id: 1 });
-  
+
   const categoriesRecords = await Promise.all(
-    userCategories.map(async (category) => ({
-      title: category.title,
-      total: await Record.aggregate([
+    userCategories.map(async (category) => {
+      const categoryRecords = await Record.aggregate([
         {
           $match: {
             balanceId,
@@ -132,18 +131,40 @@ const getCurrentMonthCategoriesBalance = async (req, res) => {
           },
         },
         {
+          $project: {
+            value: {
+              $cond: {
+                if: { $eq: ["$type", "expense"] }, 
+                then: { $multiply: ["$value", -1] },
+                else: "$value", 
+              },
+            },
+          },
+        },
+        {
           $group: {
             _id: null,
             total: { $sum: "$value" },
           },
         },
-      ]).then((result) => result.length > 0? result[0].total : 0),
-      categoryId: category._id
-    }))
+      ]);
+
+      const total = categoryRecords.length > 0 ? categoryRecords[0].total : 0;
+
+      return {
+        title: category.title,
+        total: total,
+        categoryId: category._id,
+      };
+    })
   );
 
-  res.status(200).json({ currency: balance.currency, month: now.getMonth() + 1, categories: categoriesRecords });
-}
+  res.status(200).json({
+    currency: balance.currency,
+    month: now.getMonth() + 1,
+    categories: categoriesRecords,
+  });
+};
 
 const getCategoryDetails = async (req, res) => {
   const categoryId = req.query.categoryId;
